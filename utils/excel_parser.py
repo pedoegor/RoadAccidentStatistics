@@ -7,23 +7,23 @@
 #
 
 import xlrd
-#from RoadAccidentStatistics.models import StatSubject
+from RoadAccidentStatistics.models import StatSubject
 # -*- coding: utf-8 -*-
 import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
 
-class StatSubject():
-    name = ""
-    year = 0
-    deadNumber = 0
-    injuredNumber = 0
-    sheet_type = ''
-    reasone = ''
-
-    def __unicode__(self):
-        return u'Subject: %s, dead: %s, injured: %s, year: %s, reasone: %s' % (self.name, self.deadNumber,
+#class StatSubject():
+#    name = ""
+#    year = 0
+#    deadNumber = 0
+#    injuredNumber = 0
+#    sheet_type = ''
+#    reasone = ''
+#
+#    def __unicode__(self):
+#        return u'Subject: %s, dead: %s, injured: %s, year: %s, reasone: %s' % (self.name, self.deadNumber,
                                                                               self.injuredNumber, self.year, self.reasone)
 
 def my_int(string):
@@ -75,7 +75,7 @@ def regions_info_from_sheet(file_name, year, sheet_number):
                   
     return regions
     
-r = regions_info("../tables/2012.xls", 2012)
-for i in r:
-    print i.__unicode__()    
+#r = regions_info("../tables/2012.xls", 2012)
+#for i in r:
+#    print i.__unicode__()    
 
