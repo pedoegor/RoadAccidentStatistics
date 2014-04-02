@@ -3,7 +3,7 @@ from django.db import models
 
 class Region(models.Model):
     name = models.CharField(max_length=100)
-    english_name = models.CharField(max_length=100)
+    english_name = models.CharField(max_length=100, blank=True)
     parent = models.ForeignKey("self", null=True, default=None)
 
     def __unicode__(self):
