@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.db import models
 
 
@@ -12,14 +13,27 @@ class Region(models.Model):
 
 
 class RegionStat(models.Model):
+    accident_types = (
+        ('driver', u'Нарушение ПДД водителями транспортных средств'),
+        ('drunk', u'Нарушение ПДД водителями транспортных средств в состоянии алкогольного опьянения'),
+        ('juridical', u'Нарушение ПДД водителями транспортных средств юридических лиц'),
+        ('physical', u'Нарушение ПДД водителями транспортных средств физических лиц'),
+        ('pedestrian', u'Нарушение ПДД пешеходами'),
+        ('children', u'ДТП с участием детей'),
+        ('broken', u'ДТП из-за эксплуатации технически неисправных транспортных средств'),
+        ('roads', u'ДТП из-за неудовлетворительного состояния улиц и дорог'),
+        ('hidden', u'ДТП с участием неустановленных транспортных средств'),
+        ('all', u'Общее количество ДТП'),
+    )
     region = models.ForeignKey(Region)
     year = models.IntegerField()
+    accident_type = models.CharField(max_length=10, choices=accident_types)
     deadNumber = models.IntegerField()
     injuredNumber = models.IntegerField()
 
     def __unicode__(self):
         return u'RegionStat: %s, dead: %s, injured: %s, year: %s' % (self.region.name, self.deadNumber,
-                                                                              self.injuredNumber, self.year)
+                                                                     self.injuredNumber, self.year)
 
 
 class RegionCrashedTransport(models.Model):
