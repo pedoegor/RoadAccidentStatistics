@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.shortcuts import render_to_response
 from RoadAccidentStatistics.models import Region
 from utils.region_offset import RegionOffset
@@ -14,4 +15,5 @@ def render_object_hierarchy(request):
     return render_to_response('hierarchy.template.html', {'regions': regions})
 
 
-
+def dashboard(request):
+    return render_to_response('dashboard.html', {'title': u'Статистика ДТП'})

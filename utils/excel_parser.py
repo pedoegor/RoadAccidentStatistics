@@ -10,6 +10,7 @@ import xlrd
 from RoadAccidentStatistics.models import StatSubject
 # -*- coding: utf-8 -*-
 import sys
+
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
@@ -23,22 +24,21 @@ sys.setdefaultencoding('utf-8')
 #    reasone = ''
 #
 #    def __unicode__(self):
-#        return u'Subject: %s, dead: %s, injured: %s, year: %s, reasone: %s' % (self.name, self.deadNumber,
-                                                                              self.injuredNumber, self.year, self.reasone)
+#        return u'Subject: %s, dead: %s, injured: %s, year: %s, reasone: %s' % (self.name, self.deadNumber, self.injuredNumber, self.year, self.reasone)
 
 def my_int(string):
     if string == '':
         return None
-    else: 
+    else:
         return int(string)
-         
+
 
 reasons = ['general', '', 'driver', 'drunk', 'legal_car', 'individual', 'foot', 'children', 'technical',
-              'bed_roads', 'escape', 'heavy']
+           'bed_roads', 'escape', 'heavy']
+
 
 def make_stat_subj(sheet, rowx, year, sheet_number):
-    
-    shift = 0 if sheet_number%11 == 0 else 1
+    shift = 0 if sheet_number % 11 == 0 else 1
     subj = StatSubject()
     subj.name = str(sheet.cell_value(rowx, 0))
     subj.year = year
@@ -58,23 +58,23 @@ def regions_info(file_name, year, sheet_number=-1):
             if sh == 1:
                 continue
             r = r + regions_info_from_sheet(file_name, year, sh)
-        return r    
+        return r
 
 
 def regions_info_from_sheet(file_name, year, sheet_number):
     book = xlrd.open_workbook(file_name, formatting_info=True)
     sh = book.sheet_by_index(sheet_number)
     regions = []
-    for rx in range(4, sh.nrows-2):    
+    for rx in range(4, sh.nrows - 2):
         reg = make_stat_subj(sh, rx, year, sheet_number)
-   
+
         if reg.name[:1] == "*":
-            continue 
-            
+            continue
+
         regions.append(reg)
-                  
+
     return regions
-    
+
 #r = regions_info("../tables/2012.xls", 2012)
 #for i in r:
 #    print i.__unicode__()    

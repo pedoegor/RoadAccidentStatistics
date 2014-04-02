@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ title }}</title>
+    {% include 'common.css.html' %}
+</head>
+<body>
+    {% include 'navigation.html' %}
+    <div class="container">
+        <div id="chart_div" style="width: 100%; height: 500px;"></div>
+    </div>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+        google.load("visualization", "1", {packages:["corechart"]});
+        google.setOnLoadCallback(drawRates);
+        function drawRates() {
+            var data = google.visualization.arrayToDataTable([
+            ['Регион', 'Количество ДТП на 10 тыс. ед. ТС', 'Число пострадавших на 100 тыс. жителей', 'Год','Численность населения'],
+      		    ['Белгородская область', 30,	121, '2012', 1200000],
+                ['Воронежская область', 46,	104, '2012', 800000],
+                ['Владимирская область', 76,	170, '2012', 1000000],
+                ['Брянская область', 60,	135, '2012', 900000],
+                ['Липецкая область', 57,	128, '2012', 700000],
+                ['Курская область', 53,	118, '2012', 600000],
+                ['Белгородская область', 45,	101, '2013', 1300000],
+                ['Воронежская область', 54,	114, '2013', 900000],
+                ['Владимирская область', 80,	160, '2013', 1100000],
+                ['Брянская область', 50,	125, '2013', 950000],
+                ['Липецкая область', 68,	118, '2013', 800000],
+                ['Курская область', 45,	108, '2013', 680000]
+            ]);
+            var options = {
+                title: 'Количество ДТП, число пострадавших и численность населения регионов за 2012 и 2013 года',
+                hAxis: {title: 'Количество ДТП на 10 тыс. ед. ТС'},
+                vAxis: {title: 'Число пострадавших на 100 тыс. жителей'},
+                bubble: {textStyle: {fontSize: 12}}
+            };
+
+            var chart = new google.visualization.BubbleChart(document.getElementById('chart_div'));
+            chart.draw(data, options);
+      }
+    </script>
+    {% include 'common.js.html' %}
+</body>
+</html>

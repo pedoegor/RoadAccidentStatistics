@@ -1,0 +1,73 @@
+﻿<html>
+  <head>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(drawChart);
+      google.setOnLoadCallback(drawRates);
+      function drawChart(data) {
+        /*var data = google.visualization.arrayToDataTable([
+          ['ID', 'Life Expectancy', 'Fertility Rate', 'Region',     'Population'],
+          ['CAN',    80.66,              1.67,      'North America',  33739900],
+          ['DEU',    79.84,              1.36,      'Europe',         81902307],
+          ['DNK',    78.6,               1.84,      'Europe',         5523095],
+          ['EGY',    72.73,              2.78,      'Middle East',    79716203],
+          ['GBR',    80.05,              2,         'Europe',         61801570],
+          ['IRN',    72.49,              1.7,       'Middle East',    73137148],
+          ['IRQ',    68.09,              4.77,      'Middle East',    31090763],
+          ['ISR',    81.55,              2.96,      'Middle East',    7485600],
+          ['RUS',    68.6,               1.54,      'Europe',         141850000],
+          ['USA',    78.09,              2.05,      'North America',  307007000]
+        ]);*/
+        var data = google.visualization.arrayToDataTable([
+          ['Год', 'Погибло', 'Ранено', 'Регион','Количество ДТП'],
+      		    ['2008', 447,	4432, 'Владимирская область', 3339],
+                ['2009', 427,	4302, 'Владимирская область', 3139],
+                ['2010', 437,	4372, 'Владимирская область', 3239],
+                ['2011', 417,	4202, 'Владимирская область', 3300],
+                ['2012', 407,	4172, 'Владимирская область', 3009],
+                ['2013', 410,	4032, 'Владимирская область', 2890]
+        ]);
+        var options = {
+          title: 'Correlation between life expectancy, fertility rate and population of some world countries (2010)',
+          hAxis: {title: 'Погибло'},
+          vAxis: {title: 'Ранено'},
+          bubble: {textStyle: {fontSize: 12}}
+        };
+
+        var chart = new google.visualization.BubbleChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
+        function drawRates() {
+        var data = google.visualization.arrayToDataTable([
+          ['Регион', 'Количество ДТП на 10 тыс. ед. ТС', 'Число пострадавших на 100 тыс. жителей', 'Год','Численность населения'],
+      		    ['Белгородская область', 30,	121, '2012', 1200000],
+                ['Воронежская область', 46,	104, '2012', 800000],
+                ['Владимирская область', 76,	170, '2012', 1000000],
+                ['Брянская область', 60,	135, '2012', 900000],
+                ['Липецкая область', 57,	128, '2012', 700000],
+                ['Курская область', 53,	118, '2012', 600000],
+                ['Белгородская область', 45,	101, '2013', 1300000],
+                ['Воронежская область', 54,	114, '2013', 900000],
+                ['Владимирская область', 80,	160, '2013', 1100000],
+                ['Брянская область', 50,	125, '2013', 950000],
+                ['Липецкая область', 68,	118, '2013', 800000],
+                ['Курская область', 45,	108, '2013', 680000]
+        ]);
+        var options = {
+          title: 'Количество ДТП, число пострадавших и численность населения регионов за 2012 и 2013 года',
+          hAxis: {title: 'Количество ДТП на 10 тыс. ед. ТС'},
+          vAxis: {title: 'Число пострадавших на 100 тыс. жителей'},
+          bubble: {textStyle: {fontSize: 12}}
+        };
+
+        var chart = new google.visualization.BubbleChart(document.getElementById('chart_div2'));
+        chart.draw(data, options);
+      }
+    </script>
+  </head>
+  <body>
+    <div id="chart_div" style="width: 900px; height: 500px;"></div>
+  <div id="chart_div2" style="width: 1200px; height: 800px;"></div>
+  </body>
+</html>
