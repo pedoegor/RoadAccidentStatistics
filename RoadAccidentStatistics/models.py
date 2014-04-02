@@ -31,9 +31,15 @@ class RegionStat(models.Model):
     deadNumber = models.IntegerField()
     injuredNumber = models.IntegerField()
 
+    def get_hurted_number(self):
+        return self.deadNumber + self.injuredNumber
+
     def __unicode__(self):
-        return u'RegionStat: %s, dead: %s, injured: %s, year: %s' % (self.region.name, self.deadNumber,
-                                                                     self.injuredNumber, self.year)
+        return u'RegionStat: %s, accident_type: %s, dead: %s, injured: %s, year: %s' % (self.region.name,
+                                                                                        self.accident_type,
+                                                                                        self.deadNumber,
+                                                                                        self.injuredNumber,
+                                                                                        self.year)
 
 
 class RegionCrashedTransport(models.Model):

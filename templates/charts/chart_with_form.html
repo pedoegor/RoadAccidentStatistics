@@ -1,0 +1,25 @@
+{% extends 'charts/chart.html' %}
+{% load staticfiles %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'RoadAccidentStatistics/css/ladda-themeless.min.css' %}">
+{% endblock %}
+{% block url %}
+    <div class="page-header">
+        <h2>URL</h2>
+    </div>
+    <div id="url"></div>
+{% endblock %}
+{% block js %}
+    <script src="{% static 'RoadAccidentStatistics/js/spin.min.js' %}" type="text/javascript"></script>
+    <script src="{% static 'RoadAccidentStatistics/js/ladda.min.js' %}" type="text/javascript"></script>
+    <script type="text/javascript">
+        var button = Ladda.create(document.getElementById("showButton"));
+        function startLoadAnimation() {
+            button.start();
+        }
+        function stopLoadAnimation() {
+            button.stop();
+        }
+    </script>
+    {% block additional_js %}{% endblock %}
+{% endblock %}

@@ -13,7 +13,7 @@
     <div class="container">
         <select data-placeholder="Выберите регион" style="width:350px;" class="chosen-select form-control" multiple tabindex="6">
         {% for region in regions %}
-            <option>{{ region.offset|safe }} {{ region.name }}</option>
+            <option value="{{ region.name }}">{{ region.offset|safe }} {{ region.name }}</option>
         {% endfor %}
         </select>
         <button type="button" class="btn btn-primary" onclick="show()">Show labels</button>

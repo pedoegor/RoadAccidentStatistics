@@ -1,0 +1,5 @@
+<select data-placeholder="Выберите регион" style="width:350px;" class="chosen-select form-control" multiple tabindex="6">
+   {% for region in regions %}
+        <option>{{ region.offset|safe }} {{ region.name }}</option>
+   {% endfor %}
+</select>

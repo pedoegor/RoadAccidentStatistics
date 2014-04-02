@@ -89,4 +89,6 @@ STATICFILES_DIRS = (
 
 TEMPLATE_DIRS = (
     'templates/',
+    'templates/charts',
+    'templates/charts/bubble_chart',
 )

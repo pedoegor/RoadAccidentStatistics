@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ title }}</title>
+    {% include 'common.css.html' %}
+    {% block css %}{% endblock %}
+</head>
+<body>
+    {% include 'navigation.html' %}
+    <div class="container">
+        <div class="page-header">
+            <h1>{% block chart_title %}{% endblock %}</h1>
+        </div>
+        <div class="page-header">
+            <h2>{{ parameters_title }}</h2>
+        </div>
+
+    {% block params %}{% endblock %}
+
+        <div id="chart" style="width: 100%; min-height: 500px;"></div>
+
+    {% block url %}{% endblock %}
+
+    <div class="page-header">
+        <h2>{{ info_header }}</h2>
+    </div>
+    <div id="info"></div>
+    </div>
+    {% include 'common.js.html' %}
+    {% block js %}{% endblock %}
+</body>
+</html>

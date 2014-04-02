@@ -1,4 +1,23 @@
 {% load staticfiles %}
+<script src="https://www.google.com/jsapi" type="text/javascript"></script>
 <script src="{% static 'RoadAccidentStatistics/js/jquery-2.1.0.js' %}" type="text/javascript"></script>
 <script src="{% static 'RoadAccidentStatistics/js/bootstrap.min.js' %}" type="text/javascript"></script>
 <script src="{% static 'RoadAccidentStatistics/js/chosen.jquery.js' %}" type="text/javascript"></script>
+<script type="text/javascript">
+    google.load("visualization", "1", {packages:["corechart"]});
+    $(document).ready(function(){
+        $('.chosen-select').chosen().change(function() {
+            // remove '&nbsp;'
+            $('.search-choice span').each(function() {
+                $(this).text($(this).text().trim());
+            });
+        });
+    });
+    function getSelectedRegions(){
+        var a = [];
+        $('.search-choice span').each(function() {
+                a[a.length] = $(this).text();
+        });
+        return a;
+    }
+</script>
