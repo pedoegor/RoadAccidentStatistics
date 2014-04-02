@@ -22,6 +22,17 @@ class RegionStat(models.Model):
                                                                               self.injuredNumber, self.year)
 
 
+class RegionCrashedTransport(models.Model):
+    region = models.ForeignKey(Region)
+    year = models.IntegerField()
+    crashed_transport_number = models.BigIntegerField()
+
+    def __unicode__(self):
+        return u'RegionPopulation: %s, crashed transport number: %s, year: %s' % (self.region.name,
+                                                                                  self.crashed_transport_number,
+                                                                                  self.year)
+
+
 class RegionPopulation(models.Model):
     region = models.ForeignKey(Region)
     year = models.IntegerField()
@@ -29,4 +40,5 @@ class RegionPopulation(models.Model):
 
     def __unicode__(self):
         return u'RegionPopulation: %s, population: %s, year: %s' % (self.region.name, self.population, self.year)
+
 

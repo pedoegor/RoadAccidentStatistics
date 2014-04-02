@@ -5,3 +5,4 @@ from models import *
 admin.site.register(Region)
 admin.site.register(RegionPopulation)
 admin.site.register(RegionStat)
+admin.site.register(RegionCrashedTransport)
