@@ -4,8 +4,8 @@
     <fieldset>
         <div class="form-group">
             <label class="col-md-4 control-label" for="region_selector">Регионы</label>
-            <div class="col-md-8">
-                <select id='region_selector' data-placeholder="Выберите регион" style="width:350px;" class="chosen-select form-control" multiple tabindex="6">
+            <div class="col-md-4">
+                <select id='region_selector' data-placeholder="Выберите регион" class="chosen-select form-control" multiple tabindex="6">
                     {% for region in regions %}
                         <option>{{ region.offset|safe }} {{ region.name }}</option>
                     {% endfor %}
@@ -14,11 +14,11 @@
         </div>
         <div class="form-group">
             <label class="col-md-4 control-label" for="period">Период</label>
-            <div id='period' class="col-md-8">
-                <div class="col-md-4">
+            <div id='period' class="form-horizontal">
+                <fieldset>
                     <div class="form-group">
-                        <label class="col-md-1 control-label" for="fromYear">С</label>
-                        <div class="col-md-3" style="width: 80%">
+                        <label class="col-md-2 control-label" for="fromYear">С</label>
+                        <div class="col-md-4">
                             <select id="fromYear" class="form-control">
                             {% for year in years %}
                                 <option value="{{ year }}">{{ year }}</option>
@@ -26,11 +26,9 @@
                             </select>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-4">
                     <div class="form-group">
-                        <label class="col-md-1 control-label" for="toYear">По</label>
-                        <div class="col-md-3" style="width: 80%">
+                        <label class="col-md-2 control-label" for="toYear">По</label>
+                        <div class="col-md-4">
                             <select id="toYear" class="form-control">
                             {% for year in years %}
                                 <option value="{{ year }}">{{ year }}</option>
@@ -38,7 +36,7 @@
                             </select>
                         </div>
                     </div>
-                </div>
+                </fieldset>
             </div>
         </div>
         <div class="form-group">
