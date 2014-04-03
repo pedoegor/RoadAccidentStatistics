@@ -48,9 +48,9 @@
         function stopLoadAnimation() {
             spinner.spin(false);
         }
-        function getURLToPlot() {
-            return "{{ plot_url }}";
+        function getURL() {
+            return "{{ url }}";
         }
-    {% block additional_js %}{% endblock %}
     </script>
+    {% block additional_js %}{% endblock %}
 {% endblock %}

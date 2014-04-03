@@ -20,4 +20,8 @@
         });
         return a;
     }
+    function getFullURL(url) {
+        var i = document.URL.indexOf('?');
+        return (i < 0 ? document.URL : document.URL.substr(0, i)) + url;
+    }
 </script>

@@ -1,0 +1,30 @@
+{% extends 'charts/chart_by_url.html' %}
+{% block additional_js %}
+    <script type="text/javascript">
+        var chart = new google.visualization.BubbleChart(document.getElementById('chart'));
+        $(document).ready(function(){
+            var url = getURL();
+            startLoadAnimation();
+            $.ajax({
+                url: url + "/data",
+                dataType: "json"
+            })
+            .success(function(data) {
+                    var options = {
+                        title: data.chart_title,
+                        hAxis: {title: data.hAxis_title, minValue: 0},
+                        vAxis: {title: data.vAxis_title, minValue: 0},
+                        bubble: {textStyle: {fontSize: 12}}
+                    };
+                    chart.clearChart();
+                    chart.draw(google.visualization.arrayToDataTable(data.chart_data), options);
+            })
+            .fail(function() {
+                    alert("Connection with server is lost")
+            })
+            .always(function() {
+                    stopLoadAnimation();
+            });
+        });
+    </script>
+{% endblock %}

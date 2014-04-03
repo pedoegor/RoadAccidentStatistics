@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render_to_response
 from RoadAccidentStatistics.models import *
-from utils.region_offset import RegionOffset
+from utils.wrap_classes import *
 from django.http import HttpResponse
 import json
 
@@ -27,20 +27,33 @@ def render_object_hierarchy(request):
 
 
 def dashboard(request):
-    return render_to_response('dashboard.html', {'title': u'Статистика ДТП'})
+    return render_to_response('dashboard.html', {'type': 'dashboard', 'title': u'Статистика ДТП'})
 
 
 def bubble_chart(request):
     min_year = RegionStat.objects.earliest("year").year
     max_year = RegionStat.objects.latest("year").year
-    return render_to_response('bubble_chart_with_form.html', {"title": u'Статистика ДТП',
+    return render_to_response('bubble_chart_with_form.html', {"type": "bubble_chart",
+                                                              "title": u'Статистика ДТП',
+                                                              "chart_title": u'Пузырьковая диаграмма',
                                                               "parameters_title": u'Параметры',
                                                               "info_header": u'Информация',
                                                               "regions": get_region_list_for_select(),
                                                               "years": [x for x in range(min_year, max_year + 1)]})
 
 
-def bubble_chart_plot(request, regions, from_year, to_year):
+def bubble_chart_url(request, regions, from_year, to_year):
+    parameters = [Parameter(u'Регионы', regions), Parameter(u'С', from_year), Parameter(u'По', to_year)]
+    return render_to_response('bubble_chart_by_url.html', {"type": "bubble_chart",
+                                                           "title": u'Статистика ДТП',
+                                                           "chart_title": u'Пузырьковая диаграмма',
+                                                           "parameters_title": u'Параметры',
+                                                           "info_header": u'Информация',
+                                                           "parameters": parameters,
+                                                           "url": request.path})
+
+
+def bubble_chart_data(request, regions, from_year, to_year):
     regions = regions.split(",")
     from_year = int(from_year)
     to_year = int(to_year)
