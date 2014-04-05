@@ -1,6 +1,7 @@
+# -*- coding: utf-8 -*-
 import xlrd
 #from RoadAccidentStatistics.models import StatSubject
-# -*- coding: utf-8 -*-
+
 import sys
 
 reload(sys)

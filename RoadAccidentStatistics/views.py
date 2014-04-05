@@ -57,11 +57,11 @@ def bubble_chart_data(request, regions, from_year, to_year):
     regions = regions.split(",")
     from_year = int(from_year)
     to_year = int(to_year)
-    hAxis = u'Количество ДТП на 10 тыс. ед. ТС'
-    vAxis = u'Число пострадавших на 100 тыс. жителей'
+    xAxis = u'Количество ДТП на 10 тыс. ед. ТС'
+    yAxis = u'Число пострадавших на 100 тыс. жителей'
     chart_title = u'Количество ДТП, число пострадавших и численность населения регионов с %s по %s года' % (from_year,
                                                                                                         to_year,)
-    data = [[u'Регион', hAxis, vAxis, u'Год', u'Численность населения']]
+    data = [[u'Регион', xAxis, yAxis, u'Год', u'Численность населения']]
     for region_name in regions:
         region = get_region_by_name(region_name)
         for year in range(from_year, to_year + 1):
@@ -71,8 +71,8 @@ def bubble_chart_data(request, regions, from_year, to_year):
             data.append([region.name, crashed_number / (population / 10000), hurted_number / (population / 100000),
                          '%s' % (year,), population])
     return HttpResponse(json.dumps({"chart_title": chart_title,
-                                    "hAxis_title": hAxis,
-                                    "vAxis_title": vAxis,
+                                    "xAxis_title": xAxis,
+                                    "yAxis_title": yAxis,
                                     "chart_data": data}), content_type="application/json")
 
 

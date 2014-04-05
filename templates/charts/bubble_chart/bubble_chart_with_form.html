@@ -42,7 +42,7 @@
         <div class="form-group">
             <label class="col-md-4 control-label" for="showButton"></label>
             <div class="col-md-4">
-                <button id="showButton" class="btn btn-primary ladda-button" data-style="zoom-out" onclick="show()">
+                <button id="showButton" class="btn btn-primary ladda-button" data-style="zoom-out" onclick="show('bubble')">
                     <span class="ladda-label">Show</span>
                 </button>
             </div>
@@ -53,35 +53,10 @@
 
 {% block additional_js %}
     <script type="text/javascript">
-        var chart = new google.visualization.BubbleChart(document.getElementById('chart'));
+        var chart;
         function getURL() {
             return "regions/" + getSelectedRegions() + "/from_year/" + $("#fromYear").val() +
                     "/to_year/" + $("#toYear").val();
-        }
-        function show() {
-            var url = getURL();
-            startLoadAnimation();
-            $.ajax({
-                url: url + "/data",
-                dataType: "json"
-            })
-            .success(function(data) {
-                    var options = {
-                        title: data.chart_title,
-                        hAxis: {title: data.hAxis_title, minValue: 0},
-                        vAxis: {title: data.vAxis_title, minValue: 0},
-                        bubble: {textStyle: {fontSize: 12}}
-                    };
-                    chart.clearChart();
-                    chart.draw(google.visualization.arrayToDataTable(data.chart_data), options);
-                    $("#url").text(getFullURL(url));
-            })
-            .fail(function() {
-                    alert("Connection with server is lost")
-            })
-            .always(function() {
-                    stopLoadAnimation();
-            });
         }
     </script>
 {% endblock %}
