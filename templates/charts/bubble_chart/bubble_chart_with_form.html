@@ -42,7 +42,7 @@
         <div class="form-group">
             <label class="col-md-4 control-label" for="showButton"></label>
             <div class="col-md-4">
-                <button id="showButton" class="btn btn-primary ladda-button" data-style="zoom-out" onclick="show('bubble')">
+                <button id="showButton" class="btn btn-primary ladda-button" data-style="zoom-out" onclick="callShow()">
                     <span class="ladda-label">Show</span>
                 </button>
             </div>
@@ -55,8 +55,16 @@
     <script type="text/javascript">
         var chart;
         function getURL() {
-            return "regions/" + getSelectedRegions() + "/from_year/" + $("#fromYear").val() +
+            return "regions/" + getSelectedRegions() +
+                    "/from_year/" + $("#fromYear").val() +
                     "/to_year/" + $("#toYear").val();
+        }
+        function callShow() {
+            show(function(data) {
+                chart = drawWithParameters(chart, 'chart', 'bubble', data.chart_title, data.xAxis_title, data.yAxis_title,
+                    data.chart_data, 'no');
+                $("#url").text(getFullURL(getURL()));
+            })
         }
     </script>
 {% endblock %}

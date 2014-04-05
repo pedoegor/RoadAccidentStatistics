@@ -25,18 +25,13 @@
         var i = document.URL.indexOf('?');
         return (i < 0 ? document.URL : document.URL.substr(0, i)) + url;
     }
-    function show(chartTypeName) {
-        var url = getURL();
+    function show(success) {
         startLoadAnimation();
         $.ajax({
-            url: url + "/data",
+            url: getURL() + "/data",
             dataType: "json"
         })
-        .success(function(data) {
-                chart = draw2D(chart, 'chart', chartTypeName, data.chart_title, data.xAxis_title, data.vAxis_title,
-                    data.chart_data, false, false);
-                $("#url").text(getFullURL(url));
-        })
+        .success(success)
         .fail(function() {
                 alert("Connection with server is lost")
         })

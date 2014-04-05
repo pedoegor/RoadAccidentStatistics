@@ -3,7 +3,10 @@
     <script type="text/javascript">
         var chart;
         $(document).ready(function(){
-            show('bubble');
+            show(function(data) {
+                chart = drawWithParameters(chart, 'chart', 'bubble', data.chart_title, data.xAxis_title, data.yAxis_title,
+                    data.chart_data, 'no');
+            });
         });
     </script>
 {% endblock %}

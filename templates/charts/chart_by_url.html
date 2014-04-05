@@ -6,14 +6,14 @@
       <thead>
         <tr>
           {% for parameter in parameters %}
-              <td>{{ parameter.name }}</td>
+              <td>{{ parameter.0 }}</td>
           {% endfor %}
         </tr>
       </thead>
       <tbody>
         <tr>
           {% for parameter in parameters %}
-              <td>{{ parameter.value }}</td>
+              <td>{{ parameter.1 }}</td>
           {% endfor %}
         </tr>
       </tbody>

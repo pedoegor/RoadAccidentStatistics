@@ -1,9 +1,12 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title></title>
-</head>
-<body>
-
-</body>
-</html>
+{% extends 'charts/chart_by_url.html' %}
+{% block additional_js %}
+    <script type="text/javascript">
+        var chart;
+        $(document).ready(function(){
+            show(function(data) {
+            chart = drawWithParameters(chart, 'chart', data.chart_type, data.chart_title, data.xAxis_title, data.yAxis_title,
+                    data.chart_data, data.trend_type);
+            });
+        });
+    </script>
+{% endblock %}

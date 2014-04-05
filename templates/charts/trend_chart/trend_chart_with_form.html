@@ -1,9 +1,114 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title></title>
-</head>
-<body>
+{% extends 'charts/chart_with_form.html' %}
+{% block params %}
+<form class="form-horizontal">
+    <fieldset>
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="region_selector">Регионы</label>
+            <div class="col-md-4">
+                <select id='region_selector' data-placeholder="Выберите регион" class="chosen-select form-control" multiple tabindex="6">
+                    {% for region in regions %}
+                        <option>{{ region.offset|safe }} {{ region.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="period">Период</label>
+            <div id='period' class="form-horizontal">
+                <fieldset>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label" for="fromYear">С</label>
+                        <div class="col-md-4">
+                            <select id="fromYear" class="form-control">
+                            {% for year in years %}
+                                <option value="{{ year }}">{{ year }}</option>
+                            {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label" for="toYear">По</label>
+                        <div class="col-md-4">
+                            <select id="toYear" class="form-control">
+                            {% for year in years %}
+                                <option value="{{ year }}">{{ year }}</option>
+                            {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="chartType">Тип графика</label>
+            <div class="col-md-4">
+                <select id="chartType" class="form-control">
+                    {% for chart_type in chart_types %}
+                        <option value="{{ chart_type.0 }}">{{ chart_type.1 }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="trendType">Линия тренда</label>
+            <div class="col-md-4">
+                <select id="trendType" class="form-control">
+                    {% for trend_type in trend_types %}
+                        <option value="{{ trend_type.0 }}">{{ trend_type.1 }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="accidentType">Причина ДТП</label>
+            <div class="col-md-4">
+                <select id="accidentType" class="form-control">
+                    {% for accident_type in accident_types %}
+                        <option value="{{ accident_type.0 }}">{{ accident_type.1 }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="hurtType">Наблюдаемая величина</label>
+            <div class="col-md-4">
+                <select id="hurtType" class="form-control">
+                    {% for hurt_type in hurt_types %}
+                        <option value="{{ hurt_type.0 }}">{{ hurt_type.1 }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="showButton"></label>
+            <div class="col-md-4">
+                <button id="showButton" class="btn btn-primary ladda-button" data-style="zoom-out" onclick="callShow()">
+                    <span class="ladda-label">Show</span>
+                </button>
+            </div>
+        </div>
+    </fieldset>
+</form>
+{% endblock %}
 
-</body>
-</html>
+{% block additional_js %}
+    <script type="text/javascript">
+        var chart;
+        function getURL() {
+            return "regions/" + getSelectedRegions() +
+                    "/from_year/" + $("#fromYear").val() +
+                    "/to_year/" + $("#toYear").val() +
+                    "/chart_type/" + $("#chartType").val() +
+                    "/trend_type/" + $("#trendType").val() +
+                    "/accident_type/" + $("#accidentType").val() +
+                    "/hurt_type/" + $("#hurtType").val();
+        }
+        function callShow() {
+            show(function(data) {
+                chart = drawWithParameters(chart, 'chart', data.chart_type, data.chart_title, data.xAxis_title, data.yAxis_title,
+                    data.chart_data, data.trend_type);
+                $("#url").text(getFullURL(getURL()));
+            })
+        }
+    </script>
+{% endblock %}

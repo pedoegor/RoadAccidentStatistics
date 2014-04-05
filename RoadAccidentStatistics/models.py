@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.db import models
-
+from utils.chart_support_types import *
 
 class Region(models.Model):
     name = models.CharField(max_length=100)
@@ -13,25 +13,18 @@ class Region(models.Model):
 
 
 class RegionStat(models.Model):
-    accident_types = (
-        ('driver', u'Нарушение ПДД водителями транспортных средств'),
-        ('drunk', u'Нарушение ПДД водителями транспортных средств в состоянии алкогольного опьянения'),
-        ('juridical', u'Нарушение ПДД водителями транспортных средств юридических лиц'),
-        ('physical', u'Нарушение ПДД водителями транспортных средств физических лиц'),
-        ('pedestrian', u'Нарушение ПДД пешеходами'),
-        ('children', u'ДТП с участием детей'),
-        ('broken', u'ДТП из-за эксплуатации технически неисправных транспортных средств'),
-        ('roads', u'ДТП из-за неудовлетворительного состояния улиц и дорог'),
-        ('hidden', u'ДТП с участием неустановленных транспортных средств'),
-        ('all', u'Общее количество ДТП'),
-    )
+
     region = models.ForeignKey(Region)
     year = models.IntegerField()
     accident_type = models.CharField(max_length=10, choices=accident_types)
     deadNumber = models.IntegerField()
     injuredNumber = models.IntegerField()
 
-    def get_hurted_number(self):
+    def get_hurt_number(self, hurt_type):
+        if hurt_type == 'injured':
+            return self.injuredNumber
+        if hurt_type == 'dead':
+            return self.deadNumber
         return self.deadNumber + self.injuredNumber
 
     def __unicode__(self):
