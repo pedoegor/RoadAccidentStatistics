@@ -22,13 +22,9 @@ def get_region_list_for_select():
         for child in region.region_set.all():
             dfs(child, level + 1, region_list)
 
-    regions = []
-    dfs(Region.objects.filter(parent=None)[1], 0, regions)
+    regions = [Region.objects.filter(name=u'Финляндия')[0]]
+    dfs(Region.objects.filter(name=u'Российская Федерация')[0], 0, regions)
     return regions
-
-
-def render_object_hierarchy(request):
-    return render_to_response('hierarchy.template.html', {'regions': get_region_list_for_select()})
 
 
 def dashboard(request):
