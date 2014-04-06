@@ -53,10 +53,7 @@
 
 {% block additional_js %}
     <script type="text/javascript">
-        //var chart = new google.visualization.BubbleChart(document.getElementById('chart'));
-
         var chart = new google.visualization.Sankey(document.getElementById('chart'));
-
 
         function getURL() {
             return "regions/" + getSelectedRegions() + "/from_year/" + $("#fromYear").val() +

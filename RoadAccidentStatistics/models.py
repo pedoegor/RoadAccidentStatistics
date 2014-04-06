@@ -17,21 +17,24 @@ class RegionStat(models.Model):
     region = models.ForeignKey(Region)
     year = models.IntegerField()
     accident_type = models.CharField(max_length=10, choices=accident_types)
-    deadNumber = models.IntegerField()
-    injuredNumber = models.IntegerField()
+    dead_number = models.IntegerField()
+    injured_number = models.IntegerField()
+    accident_number = models.IntegerField()
 
     def get_hurt_number(self, hurt_type):
         if hurt_type == 'injured':
-            return self.injuredNumber
+            return self.injured_number
         if hurt_type == 'dead':
-            return self.deadNumber
-        return self.deadNumber + self.injuredNumber
+            return self.dead_number
+        if hurt_type == 'hurt':
+            return self.dead_number + self.injured_number
+        return self.accident_number
 
     def __unicode__(self):
         return u'RegionStat: %s, accident_type: %s, dead: %s, injured: %s, year: %s' % (self.region.name,
                                                                                         self.accident_type,
-                                                                                        self.deadNumber,
-                                                                                        self.injuredNumber,
+                                                                                        self.dead_number,
+                                                                                        self.injured_number,
                                                                                         self.year)
 
 

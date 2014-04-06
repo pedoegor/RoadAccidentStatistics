@@ -23,7 +23,6 @@
       <exported-key name="#FAKE_RoadAccidentStatistics_region_1" table="RoadAccidentStatistics_region" schema="" catalog="" columns="parent_id"/>
       <exported-key name="#FAKE_RoadAccidentStatistics_regioncrashedtransport_1" table="RoadAccidentStatistics_regioncrashedtransport" schema="" catalog="" columns="region_id"/>
       <exported-key name="#FAKE_RoadAccidentStatistics_regionpopulation_1" table="RoadAccidentStatistics_regionpopulation" schema="" catalog="" columns="region_id"/>
-      <exported-key name="#FAKE_RoadAccidentStatistics_regionstat_1" table="RoadAccidentStatistics_regionstat" schema="" catalog="" columns="region_id"/>
       <index name="RoadAccidentStatistics_region_410d0aac" unique="true" columns="parent_id"/>
     </table>
     <table name="RoadAccidentStatistics_regioncrashedtransport" schema="" catalog="" type="TABLE">
@@ -43,17 +42,6 @@
       <primary-key columns="id"/>
       <foreign-key name="#FAKE_RoadAccidentStatistics_regionpopulation_1" columns="region_id" ref-table="RoadAccidentStatistics_region" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
       <index name="RoadAccidentStatistics_regionpopulation_55a4ce96" unique="true" columns="region_id"/>
-    </table>
-    <table name="RoadAccidentStatistics_regionstat" schema="" catalog="" type="TABLE">
-      <column name="id" sqlType="INTEGER" length="2000000000" precision="10" nullable="false" jdbcType="4"/>
-      <column name="region_id" sqlType="INTEGER" length="2000000000" precision="10" nullable="false" jdbcType="4"/>
-      <column name="year" sqlType="INTEGER" length="2000000000" precision="10" nullable="false" jdbcType="4"/>
-      <column name="accident_type" sqlType="VARCHAR(10)" length="2000000000" precision="10" nullable="false" jdbcType="12"/>
-      <column name="deadNumber" sqlType="INTEGER" length="2000000000" precision="10" nullable="false" jdbcType="4"/>
-      <column name="injuredNumber" sqlType="INTEGER" length="2000000000" precision="10" nullable="false" jdbcType="4"/>
-      <primary-key columns="id"/>
-      <foreign-key name="#FAKE_RoadAccidentStatistics_regionstat_1" columns="region_id" ref-table="RoadAccidentStatistics_region" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
-      <index name="RoadAccidentStatistics_regionstat_55a4ce96" unique="true" columns="region_id"/>
     </table>
     <table name="auth_group" schema="" catalog="" type="TABLE">
       <column name="id" sqlType="INTEGER" length="2000000000" precision="10" nullable="false" jdbcType="4"/>
