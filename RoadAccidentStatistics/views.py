@@ -6,6 +6,7 @@ from django.http import HttpResponse
 import json
 
 
+
 def get_region_by_name(name):
     return Region.objects.filter(name=name)[0]
 
@@ -74,5 +75,182 @@ def bubble_chart_data(request, regions, from_year, to_year):
                                     "hAxis_title": hAxis,
                                     "vAxis_title": vAxis,
                                     "chart_data": data}), content_type="application/json")
+
+
+def pie_chart(request):
+    min_year = RegionStat.objects.earliest("year").year
+    max_year = RegionStat.objects.latest("year").year
+    return render_to_response('pie_chart_with_form.html', {"type": "pie_chart",
+                                                           "title": u'Статистика ДТП',
+                                                           "chart_title": u'Круговая диаграмма причин ДТП',
+                                                           "parameters_title": u'Параметры',
+                                                           "info_header": u'Информация',
+                                                           "regions": get_region_list_for_select(),
+                                                           "years": [x for x in range(min_year, max_year + 1)]})
+
+
+def pie_chart_url(request, regions, from_year, to_year):
+    parameters = [Parameter(u'Регионы', regions), Parameter(u'С', from_year), Parameter(u'По', to_year)]
+    return render_to_response('pie_chart_by_url.html', {"type": "pie_chart",
+                                                        "title": u'Статистика ДТП',
+                                                        "chart_title": u'Круговая диаграмма причин ДТП',
+                                                        "parameters_title": u'Параметры',
+                                                        "info_header": u'Информация',
+                                                        "parameters": parameters,
+                                                        "url": request.path})
+
+
+def pie_chart_data(request, regions, from_year, to_year):
+    regions = regions.split(",")
+    from_year = int(from_year)
+    to_year = int(to_year)
+
+    chart_title = u'Причины ДТП с %s по %s года' % (from_year, to_year,)
+
+    accident_number = {
+        #'driver': 0,
+        #'drunk': 0,
+        'juridical': 0,
+        'physical': 0,
+        'pedestrian': 0,
+        #'children': 0,
+        'broken': 0,
+        'roads': 0,
+        'hidden': 0,
+        #u'all': 0,
+    }
+
+    driverAccidentName = u'Нарушение ПДД водителями транспортных средств'
+    drunkAccidentName = u'Нарушение ПДД водителями транспортных средств в состоянии алкогольного опьянения'
+    juridicalAccidentName = u'Нарушение ПДД водителями транспортных средств юридических лиц'
+    physicalAccidentName = u'Нарушение ПДД водителями транспортных средств физических лиц'
+    pedestrianAccidentName = u'Нарушение ПДД пешеходами'
+    childrenAccidentName = u'ДТП с участием детей'
+    brokenAccidentName = u'ДТП из-за эксплуатации технически неисправных транспортных средств'
+    roadsAccidentName = u'ДТП из-за неудовлетворительного состояния улиц и дорог'
+    hiddenAccidentName = u'ДТП с участием неустановленных транспортных средств'
+    #allAccidentName = u'Общее количество ДТП'
+
+    driverAccidentNumber = 0
+    drunkAccidentNumber = 0
+    juridicalAccidentNumber = 0
+    physicalAccidentNumber = 0
+    pedestrianAccidentNumber = 0
+    childrenAccidentNumber = 0
+    brokenAccidentNumber = 0
+    roadsAccidentNumber = 0
+    hiddenAccidentNumber = 0
+    #allAccidentNumber = 0
+
+    for region_name in regions:
+        region = get_region_by_name(region_name)
+        for year in range(from_year, to_year + 1):
+            stat_objects = RegionStat.objects.filter(region=region, year=year)
+            for current in stat_objects:
+                if str(current.accident_type) not in ['all', 'driver', 'drunk', 'children']:
+                    accident_number[str(current.accident_type)] += current.get_hurted_number()
+
+    data = [['Accident type', 'Accident number']]
+    for current in accident_number.keys():
+        data.append([current, accident_number[current]])
+
+    return HttpResponse(json.dumps({"chart_title": chart_title, "chart_data": data}), content_type="application/json")
+
+
+def sankey_chart(request):
+    min_year = RegionStat.objects.earliest("year").year
+    max_year = RegionStat.objects.latest("year").year
+    return render_to_response('sankey_chart_with_form.html', {"type": "sankey_chart",
+                                                              "title": u'Статистика ДТП',
+                                                              "chart_title": u'Потоковая диаграмма причин ДТП',
+                                                              "parameters_title": u'Параметры',
+                                                              "info_header": u'Информация',
+                                                              "regions": get_region_list_for_select(),
+                                                              "years": [x for x in range(min_year, max_year + 1)]})
+
+
+def sankey_chart_url(request, regions, from_year, to_year):
+    parameters = [Parameter(u'Регионы', regions), Parameter(u'С', from_year), Parameter(u'По', to_year)]
+    return render_to_response('sankey_chart_by_url.html', {"type": "sankey_chart",
+                                                           "title": u'Статистика ДТП',
+                                                           "chart_title": u'Потоковая диаграмма причин ДТП',
+                                                           "parameters_title": u'Параметры',
+                                                           "info_header": u'Информация',
+                                                           "parameters": parameters,
+                                                           "url": request.path})
+
+
+def sankey_chart_data(request, regions, from_year, to_year):
+    regions = regions.split(",")
+    from_year = int(from_year)
+    to_year = int(to_year)
+
+    chart_title = u'Причины и виновники ДТП с %s по %s года' % (from_year, to_year,)
+
+    accident_number = {
+        'driver': 0,
+        'drunk': 0,
+        'juridical': 0,
+        'physical': 0,
+        'pedestrian': 0,
+        'children': 0,
+        'broken': 0,
+        'roads': 0,
+        'hidden': 0,
+        'all': 0,
+    }
+
+    driverAccidentName = u'Нарушение ПДД водителями транспортных средств'
+    drunkAccidentName = u'Нарушение ПДД водителями транспортных средств в состоянии алкогольного опьянения'
+    juridicalAccidentName = u'Нарушение ПДД водителями транспортных средств юридических лиц'
+    physicalAccidentName = u'Нарушение ПДД водителями транспортных средств физических лиц'
+    pedestrianAccidentName = u'Нарушение ПДД пешеходами'
+    childrenAccidentName = u'ДТП с участием детей'
+    brokenAccidentName = u'ДТП из-за эксплуатации технически неисправных транспортных средств'
+    roadsAccidentName = u'ДТП из-за неудовлетворительного состояния улиц и дорог'
+    hiddenAccidentName = u'ДТП с участием неустановленных транспортных средств'
+    allAccidentName = u'Общее количество ДТП'
+
+    driverAccidentNumber = 0
+    drunkAccidentNumber = 0
+    juridicalAccidentNumber = 0
+    physicalAccidentNumber = 0
+    pedestrianAccidentNumber = 0
+    childrenAccidentNumber = 0
+    brokenAccidentNumber = 0
+    roadsAccidentNumber = 0
+    hiddenAccidentNumber = 0
+    allAccidentNumber = 0
+
+    for region_name in regions:
+        region = get_region_by_name(region_name)
+        for year in range(from_year, to_year + 1):
+            stat_objects = RegionStat.objects.filter(region=region, year=year)
+            for current in stat_objects:
+                accident_number[str(current.accident_type)] += current.get_hurted_number()
+
+    data = []
+
+
+    data.append(['all', 'roads', accident_number['roads']])
+    data.append(['all', 'broken', accident_number['broken']])
+
+    data.append(['all', 'driver or pedestrian', accident_number['driver'] + accident_number['pedestrian']])
+
+
+
+    data.append(['driver or pedestrian', 'driver', accident_number['driver']])
+
+
+    data.append(['driver', 'physical', accident_number['physical']])
+    data.append(['driver', 'juridical', accident_number['juridical']])
+    data.append(['driver', 'hidden', accident_number['hidden']])
+
+    data.append(['driver or pedestrian', 'pedestrian', accident_number['pedestrian']])
+
+
+
+    return HttpResponse(json.dumps({"chart_title": chart_title, "chart_data": data}), content_type="application/json")
+
 
 

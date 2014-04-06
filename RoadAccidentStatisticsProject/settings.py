@@ -91,4 +91,6 @@ TEMPLATE_DIRS = (
     'templates/',
     'templates/charts',
     'templates/charts/bubble_chart',
+    'templates/charts/pie_chart',
+    'templates/charts/sankey_chart',
 )
