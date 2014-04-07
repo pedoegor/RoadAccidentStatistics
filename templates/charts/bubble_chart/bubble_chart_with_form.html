@@ -2,43 +2,7 @@
 {% block params %}
 <form class="form-horizontal">
     <fieldset>
-        <div class="form-group">
-            <label class="col-md-4 control-label" for="region_selector">Регионы</label>
-            <div class="col-md-4">
-                <select id='region_selector' data-placeholder="Выберите регион" class="chosen-select form-control" multiple tabindex="6">
-                    {% for region in regions %}
-                        <option>{{ region.offset|safe }} {{ region.name }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-md-4 control-label" for="period">Период</label>
-            <div id='period' class="form-horizontal">
-                <fieldset>
-                    <div class="form-group">
-                        <label class="col-md-2 control-label" for="fromYear">С</label>
-                        <div class="col-md-4">
-                            <select id="fromYear" class="form-control">
-                            {% for year in years %}
-                                <option value="{{ year }}">{{ year }}</option>
-                            {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-2 control-label" for="toYear">По</label>
-                        <div class="col-md-4">
-                            <select id="toYear" class="form-control">
-                            {% for year in years %}
-                                <option value="{{ year }}">{{ year }}</option>
-                            {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-                </fieldset>
-            </div>
-        </div>
+        {% include 'region_and_period.html' %}
         <div class="form-group">
             <label class="col-md-4 control-label" for="showButton"></label>
             <div class="col-md-4">
@@ -53,7 +17,6 @@
 
 {% block additional_js %}
     <script type="text/javascript">
-        var chart;
         function getURL() {
             return "regions/" + getSelectedRegions() +
                     "/from_year/" + $("#fromYear").val() +
@@ -61,9 +24,11 @@
         }
         function callShow() {
             show(function(data) {
-                chart = drawWithParameters(chart, 'chart', 'bubble', data.chart_title, data.xAxis_title, data.yAxis_title,
-                    data.chart_data, 'no');
+                var dataTable = google.visualization.arrayToDataTable(data.chart_data);
+                chart = drawWithParameters(chart, 'chart', 'bubble', dataTable, data.chart_title, data.xAxis_title,
+                        data.yAxis_title, 'no');
                 $("#url").text(getFullURL(getURL()));
+                info = drawTable(info, 'info', dataTable);
             })
         }
     </script>

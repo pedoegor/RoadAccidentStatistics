@@ -71,7 +71,7 @@ def bubble_chart_data(request, regions, from_year, to_year):
             crashed_number = RegionCrashedTransport.objects.filter(region=region, year=year)[0].crashed_transport_number
             hurt_number = RegionStat.objects.filter(region=region, year=year, accident_type='all')[0].get_hurt_number('hurt')
             data.append([region.name, crashed_number / (population / 10000), hurt_number / (population / 100000),
-                         year, population])
+                         str(year), population])
     return HttpResponse(json.dumps({"chart_title": chart_title,
                                     "xAxis_title": xAxis,
                                     "yAxis_title": yAxis,

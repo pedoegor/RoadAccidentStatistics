@@ -49,12 +49,50 @@ chartObjectMap["bubble"] = function(chartDiv, title, xAxisTitle, yAxisTitle, tre
         options: getOptions(title, xAxisTitle, yAxisTitle, trendType, trendLineNumber)
     };
 };
-function drawWithParameters(chartObject, chartDiv, chartTypeName, title, xAxisTitle, yAxisTitle, data, trendType) {
+chartObjectMap["sankey"] = function(chartDiv) {
+    return {
+        object: new google.visualization.Sankey(document.getElementById(chartDiv)),
+        options: {
+            sankey: {
+                node: {
+                    label: {
+                        fontName: 'Times-Roman',
+                        fontSize: 12,
+                        color: '#000',
+                        bold: true,
+                        italic: false
+                    },
+                    labelPadding: 6,
+                    nodePadding: 10,
+                    width: 5
+                }
+            }
+        }
+    };
+};
+chartObjectMap["pie"] = function(chartDiv, title) {
+    return {
+        object: new google.visualization.PieChart(document.getElementById(chartDiv)),
+        options: {
+            title: title,
+            is3D: true
+        }
+    };
+};
+function drawWithParameters(chartObject, chartDiv, chartTypeName, data, title, xAxisTitle, yAxisTitle, trendType, trendNumber) {
     if (chartObject != null) {
         chartObject.clearChart();
     }
-    chartContext = chartObjectMap[chartTypeName](chartDiv, title, xAxisTitle, yAxisTitle, trendType, data[0].length - 1);
+    chartContext = chartObjectMap[chartTypeName](chartDiv, title, xAxisTitle, yAxisTitle, trendType, trendNumber);
     chartObject = chartContext.object;
-    chartObject.draw(google.visualization.arrayToDataTable(data), chartContext.options);
+    chartObject.draw(data, chartContext.options);
     return chartObject;
+}
+function drawTable(tableObject, tableDiv, data) {
+    if (tableObject != null) {
+        tableObject.clearChart();
+    }
+    tableObject = new google.visualization.Table(document.getElementById(tableDiv));
+    tableObject.draw(data, {showRowNumber: true});
+    return tableObject;
 }

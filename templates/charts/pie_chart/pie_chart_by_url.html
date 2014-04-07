@@ -1,28 +1,11 @@
 {% extends 'charts/chart_by_url.html' %}
 {% block additional_js %}
     <script type="text/javascript">
-        var chart = new google.visualization.PieChart(document.getElementById('chart'));
         $(document).ready(function(){
-            var url = getURL();
-            startLoadAnimation();
-            $.ajax({
-                url: url + "/data",
-                dataType: "json"
-            })
-            .success(function(data) {
-
-                   var options = {
-                        title: data.chart_title,
-                        is3D: true
-                    };
-                    chart.clearChart();
-                    chart.draw(google.visualization.arrayToDataTable(data.chart_data), options);
-            })
-            .fail(function() {
-                    alert("Connection with server is lost")
-            })
-            .always(function() {
-                    stopLoadAnimation();
+            show(function(data) {
+                var dataTable = google.visualization.arrayToDataTable(data.chart_data);
+                chart = drawWithParameters(chart, 'chart', 'pie', dataTable, data.chart_title);
+                info = drawTable(info, 'info', dataTable);
             });
         });
     </script>

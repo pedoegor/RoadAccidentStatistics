@@ -31,10 +31,11 @@ class RegionStat(models.Model):
         return self.accident_number
 
     def __unicode__(self):
-        return u'RegionStat: %s, accident_type: %s, dead: %s, injured: %s, year: %s' % (self.region.name,
+        return u'RegionStat: %s, accident_type: %s, dead: %s, injured: %s, accident number: %s, year: %s' % (self.region.name,
                                                                                         self.accident_type,
                                                                                         self.dead_number,
                                                                                         self.injured_number,
+                                                                                        self.accident_number,
                                                                                         self.year)
 
 

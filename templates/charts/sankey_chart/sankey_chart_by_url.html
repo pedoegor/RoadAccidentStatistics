@@ -1,43 +1,15 @@
 {% extends 'charts/chart_by_url.html' %}
 {% block additional_js %}
     <script type="text/javascript">
-        var chart = new google.visualization.Sankey(document.getElementById('chart'));
         $(document).ready(function(){
-            var url = getURL();
-            startLoadAnimation();
-            $.ajax({
-                url: url + "/data",
-                dataType: "json"
-            })
-            .success(function(data){
-                   var options = {
-                        sankey: {
-                            node: {
-                                    label: {
-                                    fontName: 'Times-Roman',
-                                     color: '#000',
-                                     bold: true,
-                                    italic: false
-                                    },
-                                labelPadding: 6, // Horizontal distance between the label and the node.
-                                nodePadding: 20, // Vertical distance between nodes.
-                                width: 5         // Thickness of the node.
-                            }
-                        }
-                   };
-                   var data_table = new google.visualization.DataTable();
-                   data_table.addColumn('string', 'From');
-                   data_table.addColumn('string', 'To');
-                   data_table.addColumn('number', 'Weight');
-                   data_table.addRows(data.chart_data)
-
-                   chart.draw(data_table, options);
-            })
-            .fail(function() {
-                    alert("Connection with server is lost")
-            })
-            .always(function() {
-                    stopLoadAnimation();
+            show(function(data) {
+                var dataTable = new google.visualization.DataTable();
+                dataTable.addColumn('string', 'From');
+                dataTable.addColumn('string', 'To');
+                dataTable.addColumn('number', 'Weight');
+                dataTable.addRows(data.chart_data)
+                chart = drawWithParameters(chart, 'chart', 'sankey', dataTable);
+                info = drawTable(info, 'info', dataTable);
             });
         });
     </script>

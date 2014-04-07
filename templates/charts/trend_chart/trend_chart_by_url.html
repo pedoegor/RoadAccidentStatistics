@@ -1,11 +1,12 @@
 {% extends 'charts/chart_by_url.html' %}
 {% block additional_js %}
     <script type="text/javascript">
-        var chart;
         $(document).ready(function(){
             show(function(data) {
-            chart = drawWithParameters(chart, 'chart', data.chart_type, data.chart_title, data.xAxis_title, data.yAxis_title,
-                    data.chart_data, data.trend_type);
+                var dataTable = google.visualization.arrayToDataTable(data.chart_data);
+                chart = drawWithParameters(chart, 'chart', data.chart_type, dataTable, data.chart_title,
+                        data.xAxis_title, data.yAxis_title, data.trend_type, data.chart_data[0].length - 1);
+                info = drawTable(info, 'info', dataTable);
             });
         });
     </script>
