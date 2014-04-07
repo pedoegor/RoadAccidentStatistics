@@ -15,12 +15,17 @@ accident_types = (
     ('all', u'Общее количество ДТП'),
 )
 
-hurt_types = (
+stat_types = (
     ('hurt', u'Число пострадавших'),
     ('dead', u'Число умерших'),
     ('injured', u'Число раненых'),
     ('accident', u'Число ДТП'),
-    ('transport', u'Число единиц транспортных средств'),
+)
+
+scale_types = (
+    ('no', u'без масштаба'),
+    ('population', u'на 100 тыс. жителей'),
+    ('transport', u'на 10 тыс. транспортных средств'),
 )
 
 chart_types = (
@@ -37,29 +42,29 @@ trend_types = (
     ('exponential', u'Экспоненциальная'),
 )
 
-def get_accident_name_by_type(searched_accident_type):
-    for accident_type in accident_types:
-        if accident_type[0] == searched_accident_type:
-            return accident_type[1]
+
+def get_name(searched_type, types):
+    for cur in types:
+        if cur[0] == searched_type:
+            return cur[1]
     return None
+
+
+def get_accident_name_by_type(searched_accident_type):
+    return get_name(searched_accident_type, accident_types)
 
 
 def get_chart_name_by_type(searched_chart_type):
-    for chart_type in chart_types:
-        if chart_type[0] == searched_chart_type:
-            return chart_type[1]
-    return None
+    return get_name(searched_chart_type, chart_types)
 
 
-def get_hurt_name_by_type(searched_hurt_type):
-    for hurt_type in hurt_types:
-        if hurt_type[0] == searched_hurt_type:
-            return hurt_type[1]
-    return None
+def get_stat_name_by_type(searched_stat_type):
+    return get_name(searched_stat_type, stat_types)
 
 
 def get_trend_name_by_type(searched_trend_type):
-    for trend_type in trend_types:
-        if trend_type[0] == searched_trend_type:
-            return trend_type[1]
-    return None
+    return get_name(searched_trend_type, trend_types)
+
+
+def get_scale_name_by_type(searched_scale_type):
+    return get_name(searched_scale_type, scale_types)

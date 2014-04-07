@@ -34,11 +34,21 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-md-4 control-label" for="hurtType">Наблюдаемая величина</label>
+            <label class="col-md-4 control-label" for="statType">Наблюдаемая величина</label>
             <div class="col-md-4">
-                <select id="hurtType" class="form-control">
-                    {% for hurt_type in hurt_types %}
-                        <option value="{{ hurt_type.0 }}">{{ hurt_type.1 }}</option>
+                <select id="statType" class="form-control">
+                    {% for stat_type in stat_types %}
+                        <option value="{{ stat_type.0 }}">{{ stat_type.1 }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="scaleType">Масштаб</label>
+            <div class="col-md-4">
+                <select id="scaleType" class="form-control">
+                    {% for scale_type in scale_types %}
+                        <option value="{{ scale_type.0 }}">{{ scale_type.1 }}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -64,7 +74,8 @@
                     "/chart_type/" + $("#chartType").val() +
                     "/trend_type/" + $("#trendType").val() +
                     "/accident_type/" + $("#accidentType").val() +
-                    "/hurt_type/" + $("#hurtType").val();
+                    "/stat_type/" + $("#statType").val() +
+                    "/scale_type/" + $("#scaleType").val();;
         }
         function callShow() {
             show(function(data) {

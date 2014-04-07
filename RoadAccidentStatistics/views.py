@@ -69,7 +69,7 @@ def bubble_chart_data(request, regions, from_year, to_year):
         for year in range(from_year, to_year + 1):
             population = RegionPopulation.objects.filter(region=region, year=year)[0].population
             crashed_number = RegionCrashedTransport.objects.filter(region=region, year=year)[0].crashed_transport_number
-            hurt_number = RegionStat.objects.filter(region=region, year=year, accident_type='all')[0].get_hurt_number('hurt')
+            hurt_number = RegionStat.objects.filter(region=region, year=year, accident_type='all')[0].get_stat_number('hurt')
             data.append([region.name, crashed_number / (population / 10000), hurt_number / (population / 100000),
                          str(year), population])
     return HttpResponse(json.dumps({"chart_title": chart_title,
@@ -89,25 +89,29 @@ def trend_chart(request):
                                                               "regions": get_region_list_for_select(),
                                                               "years": [x for x in range(min_year, max_year + 1)],
                                                               "accident_types": accident_types,
-                                                              "hurt_types": hurt_types,
+                                                              "stat_types": stat_types,
                                                               "chart_types": chart_types,
-                                                              "trend_types": trend_types})
+                                                              "trend_types": trend_types,
+                                                              "scale_types": scale_types})
 
 
-def trend_chart_url(request, regions, from_year, to_year, chart_type, trend_type, accident_type, hurt_type):
+def trend_chart_url(request, regions, from_year, to_year, chart_type, trend_type, accident_type, stat_type, scale_type):
     regions = regions.split(",")
     from_year = int(from_year)
     to_year = int(to_year)
     accident_name = get_accident_name_by_type(accident_type)
-    hurt_name = get_hurt_name_by_type(hurt_type)
+    stat_name = get_stat_name_by_type(stat_type)
     chart_name = get_chart_name_by_type(chart_type)
     trend_name = get_trend_name_by_type(trend_type)
+    scale_name = get_scale_name_by_type(scale_type)
 
-    if from_year > to_year or accident_name is None or hurt_name is None or chart_name is None or trend_name is None:
+    if from_year > to_year or accident_name is None or stat_name is None or chart_name is None or trend_name is None \
+            or scale_name is None:
         return bad_request(request)
 
     parameters = ((u'Регионы', list_to_str(regions)), (u'С', from_year), (u'По', to_year), (u'Тип графика', chart_name),
-                  (u'Линия тренда', trend_name), (u'Причина ДТП', accident_name), (u'Наблюдаемая величина', hurt_name))
+                  (u'Линия тренда', trend_name), (u'Причина ДТП', accident_name), (u'Наблюдаемая величина', stat_name),
+                  (u'Масштаб', scale_name),)
     return render_to_response('trend_chart_by_url.html', {"type": "trend_chart",
                                                           "title": u'Статистика ДТП',
                                                           "chart_title": u'График статистики ДТП с трендом',
@@ -117,29 +121,38 @@ def trend_chart_url(request, regions, from_year, to_year, chart_type, trend_type
                                                           "url": request.path})
 
 
-def trend_chart_data(request, regions, from_year, to_year, chart_type, trend_type, accident_type, hurt_type):
+def trend_chart_data(request, regions, from_year, to_year, chart_type, trend_type, accident_type, stat_type, scale_type):
     regions = regions.split(",")
     from_year = int(from_year)
     to_year = int(to_year)
     accident_name = get_accident_name_by_type(accident_type)
-    hurt_name = get_hurt_name_by_type(hurt_type)
+    stat_name = get_stat_name_by_type(stat_type)
     chart_name = get_chart_name_by_type(chart_type)
     trend_name = get_trend_name_by_type(trend_type)
+    scale_name = get_scale_name_by_type(scale_type)
 
-    if from_year > to_year or accident_name is None or hurt_name is None or chart_name is None or trend_name is None:
+    if from_year > to_year or accident_name is None or stat_name is None or chart_name is None or trend_name is None \
+            or scale_name is None:
         return None
 
     xAxis = u'Год'
-    yAxis = hurt_name
-    chart_title = u'%s по причине \"%s\" с %s по %s года' % (hurt_name, accident_name, from_year,to_year,)
+    yAxis = stat_name
+    chart_title = u'%s %s по причине \"%s\" с %s по %s года' % (stat_name, scale_name, accident_name, from_year, to_year,)
     year_value_type_function = lambda x: x if chart_type == "point" or trend_type != 'no' else str(x)
     data = [[u'Год'] + regions] + [[year_value_type_function(year)] for year in range(from_year, to_year + 1)]
 
     stat_data = RegionStat.objects.filter(accident_type=accident_type)
+    if scale_type == 'no':
+        scale_function = lambda r, y: 1
+    elif scale_type == 'population':
+        scale_function = lambda r, y: RegionPopulation.objects.filter(region=r, year=y)[0].population / 100000
+    else:
+        scale_function = lambda r, y: RegionCrashedTransport.objects.filter(region=r, year=y)[0].crashed_transport_number/ 10000
     for region_name in regions:
-        region_stat_data = stat_data.filter(region=get_region_by_name(region_name))
+        region = get_region_by_name(region_name)
+        region_stat_data = stat_data.filter(region=region)
         for i in range(to_year + 1 - from_year):
-            data[i + 1].append(region_stat_data.filter(year=from_year + i)[0].get_hurt_number(hurt_type))
+            data[i + 1].append(region_stat_data.filter(year=from_year + i)[0].get_stat_number(stat_type) / scale_function(region, year))
 
     return HttpResponse(json.dumps({"chart_title": chart_title,
                                     "xAxis_title": xAxis,
@@ -192,7 +205,7 @@ def pie_chart_data(request, regions, from_year, to_year):
             stat_objects = RegionStat.objects.filter(region=region, year=year)
             for current in stat_objects:
                 if current.accident_type in accident_number.keys():
-                    accident_number[str(current.accident_type)] += current.get_hurt_number('all')
+                    accident_number[str(current.accident_type)] += current.get_stat_number('all')
 
     data = [[u'Причина ДТП', u'Число пострадавших']] + [[get_accident_name_by_type(current),
                                                          accident_number[current]] for current in accident_number.keys()]
@@ -245,7 +258,7 @@ def sankey_chart_data(request, regions, from_year, to_year):
         for year in range(from_year, to_year + 1):
             stat_objects = RegionStat.objects.filter(region=region, year=year)
             for current in stat_objects:
-                accident_number[str(current.accident_type)] += current.get_hurt_number('all')
+                accident_number[str(current.accident_type)] += current.get_stat_number('all')
     all_name = get_accident_name_by_type('all')
     driver_name = get_accident_name_by_type('driver')
     driver_and_pedestrian_name = u'ДТП по вине водителей и пешеходов'

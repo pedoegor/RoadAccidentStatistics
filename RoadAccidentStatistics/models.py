@@ -21,7 +21,7 @@ class RegionStat(models.Model):
     injured_number = models.IntegerField()
     accident_number = models.IntegerField()
 
-    def get_hurt_number(self, hurt_type):
+    def get_stat_number(self, hurt_type):
         if hurt_type == 'injured':
             return self.injured_number
         if hurt_type == 'dead':

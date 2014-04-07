@@ -11,8 +11,8 @@ urlpatterns = patterns('',
     url(r'^bubble_chart/regions/([\w ,]+)/from_year/(\d{4})/to_year/(\d{4})', bubble_chart_url),
     url(r'^bubble_chart/', bubble_chart),
 
-    url(r'^trend_chart/regions/([\w ,]+)/from_year/(\d{4})/to_year/(\d{4})/chart_type/(\w+)/trend_type/(\w+)/accident_type/(\w+)/hurt_type/(\w+)/data', trend_chart_data),
-    url(r'^trend_chart/regions/([\w ,]+)/from_year/(\d{4})/to_year/(\d{4})/chart_type/(\w+)/trend_type/(\w+)/accident_type/(\w+)/hurt_type/(\w+)', trend_chart_url),
+    url(r'^trend_chart/regions/([\w ,]+)/from_year/(\d{4})/to_year/(\d{4})/chart_type/(\w+)/trend_type/(\w+)/accident_type/(\w+)/stat_type/(\w+)/scale_type/(\w+)/data', trend_chart_data),
+    url(r'^trend_chart/regions/([\w ,]+)/from_year/(\d{4})/to_year/(\d{4})/chart_type/(\w+)/trend_type/(\w+)/accident_type/(\w+)/stat_type/(\w+)/scale_type/(\w+)', trend_chart_url),
     url(r'^trend_chart/', trend_chart),
 
     url(r'^pie_chart/regions/([\w ,]+)/from_year/(\d{4})/to_year/(\d{4})/data', pie_chart_data),
