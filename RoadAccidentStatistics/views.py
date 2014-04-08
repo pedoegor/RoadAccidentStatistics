@@ -261,12 +261,20 @@ def sankey_chart_data(request, regions, from_year, to_year):
                 accident_number[str(current.accident_type)] += current.get_stat_number('all')
     all_name = get_accident_name_by_type('all')
     driver_name = get_accident_name_by_type('driver')
+    broken_name = get_accident_name_by_type('broken')
+    roads_name = get_accident_name_by_type('roads')
+    pedestrian_name = get_accident_name_by_type('pedestrian')
     driver_and_pedestrian_name = u'ДТП по вине водителей и пешеходов'
-    data = [[all_name, get_accident_name_by_type('broken'), accident_number['broken']],
-            [all_name, get_accident_name_by_type('roads'), accident_number['roads']],
+    data = [[all_name, broken_name, accident_number['broken']],
+            [all_name, roads_name, accident_number['roads']],
             [all_name, driver_and_pedestrian_name, accident_number['driver'] + accident_number['pedestrian']],
+            [broken_name, ' ', -1],
+            [' ', '  ', -1],
+            [roads_name, '   ', -1],
+            ['   ', '    ', -1],
             [driver_and_pedestrian_name, driver_name, accident_number['driver']],
-            [driver_and_pedestrian_name, get_accident_name_by_type('pedestrian'), accident_number['pedestrian']],
+            [driver_and_pedestrian_name, pedestrian_name, accident_number['pedestrian']],
+            [pedestrian_name, '     ', -1],
             [driver_name, get_accident_name_by_type('physical'), accident_number['physical']],
             [driver_name, get_accident_name_by_type('juridical'), accident_number['juridical']],
             [driver_name, get_accident_name_by_type('hidden'), accident_number['hidden']]]

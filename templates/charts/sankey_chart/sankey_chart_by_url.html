@@ -4,12 +4,23 @@
         $(document).ready(function(){
             show(function(data) {
                 var dataTable = new google.visualization.DataTable();
-                dataTable.addColumn('string', 'From');
-                dataTable.addColumn('string', 'To');
-                dataTable.addColumn('number', 'Weight');
-                dataTable.addRows(data.chart_data)
+                dataTable.addColumn('string', 'От');
+                dataTable.addColumn('string', 'К');
+                dataTable.addColumn('number', 'Количество ДТП');
+                dataTable.addRows(data.chart_data);
                 chart = drawWithParameters(chart, 'chart', 'sankey', dataTable);
-                info = drawTable(info, 'info', dataTable);
+                var infoData = [];
+                for (var i = 0; i < data.chart_data.length; i++) {
+                    if(data.chart_data[i][2] > 0){
+                        infoData[infoData.length] = data.chart_data[i];
+                    }
+                }
+                var infoDataTable = new google.visualization.DataTable();
+                infoDataTable.addColumn('string', 'От');
+                infoDataTable.addColumn('string', 'К');
+                infoDataTable.addColumn('number', 'Количество ДТП');
+                infoDataTable.addRows(infoData);
+                info = drawTable(info, 'info', infoDataTable);
             });
         });
     </script>

@@ -54,16 +54,17 @@ chartObjectMap["sankey"] = function(chartDiv) {
         object: new google.visualization.Sankey(document.getElementById(chartDiv)),
         options: {
             sankey: {
+                iterations: 50,
                 node: {
                     label: {
-                        fontName: 'Times-Roman',
+                        fontName: 'Calibri',
                         fontSize: 12,
                         color: '#000',
                         bold: true,
                         italic: false
                     },
                     labelPadding: 6,
-                    nodePadding: 10,
+                    nodePadding: 80,
                     width: 5
                 }
             }
