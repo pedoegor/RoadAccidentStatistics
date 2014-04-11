@@ -59,3 +59,5 @@ class RegionPopulation(models.Model):
         return u'RegionPopulation: %s, population: %s, year: %s' % (self.region.name, self.population, self.year)
 
 
+class DownloadFile(models.Model):
+    name = models.CharField()
