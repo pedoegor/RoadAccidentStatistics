@@ -60,4 +60,4 @@ class RegionPopulation(models.Model):
 
 
 class DownloadFile(models.Model):
-    name = models.CharField()
+    name = models.CharField(max_length=200)
