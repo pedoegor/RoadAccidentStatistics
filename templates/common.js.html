@@ -32,11 +32,12 @@
         startLoadAnimation();
         $.ajax({
             url: getURL() + "/data",
+            timeout:10000,
             dataType: "json"
         })
         .success(success)
         .fail(function() {
-                alert("Connection with server is lost")
+                alert("Connection with server is lost");
         })
         .always(function() {
                 stopLoadAnimation();

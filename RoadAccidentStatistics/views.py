@@ -28,6 +28,7 @@ def get_region_list_for_select():
 
 
 def dashboard(request):
+    print len(RegionStat.objects.all())
     return render_to_response('dashboard.html', {'type': 'dashboard', 'title': u'Статистика ДТП'})
 
 
@@ -70,7 +71,7 @@ def bubble_chart_data(request, regions, from_year, to_year):
             population = RegionPopulation.objects.filter(region=region, year=year)[0].population
             crashed_number = RegionCrashedTransport.objects.filter(region=region, year=year)[0].crashed_transport_number
             hurt_number = RegionStat.objects.filter(region=region, year=year, accident_type='all')[0].get_stat_number('hurt')
-            data.append([region.name, crashed_number / (population / 10000), hurt_number / (population / 100000),
+            data.append([region.name, crashed_number / (population / 10), hurt_number / (population / 100),
                          str(year), population])
     return HttpResponse(json.dumps({"chart_title": chart_title,
                                     "xAxis_title": xAxis,
@@ -171,11 +172,13 @@ def pie_chart(request):
                                                            "parameters_title": u'Параметры',
                                                            "info_header": u'Информация',
                                                            "regions": get_region_list_for_select(),
+                                                           "stat_types": stat_types,
                                                            "years": [x for x in range(min_year, max_year + 1)]})
 
 
-def pie_chart_url(request, regions, from_year, to_year):
-    parameters = [(u'Регионы', regions), (u'С', from_year), (u'По', to_year)]
+def pie_chart_url(request, regions, stat_type, from_year, to_year):
+    stat_name = get_stat_name_by_type(stat_type)
+    parameters = [(u'Регионы', regions), (u'Наблюдаемая величина', stat_name), (u'С', from_year), (u'По', to_year)]
     return render_to_response('pie_chart_by_url.html', {"type": "pie_chart",
                                                         "title": u'Статистика ДТП',
                                                         "chart_title": u'Круговая диаграмма причин ДТП',
@@ -185,7 +188,7 @@ def pie_chart_url(request, regions, from_year, to_year):
                                                         "url": request.path})
 
 
-def pie_chart_data(request, regions, from_year, to_year):
+def pie_chart_data(request, regions, stat_type, from_year, to_year):
     regions = regions.split(",")
     from_year = int(from_year)
     to_year = int(to_year)
@@ -205,7 +208,7 @@ def pie_chart_data(request, regions, from_year, to_year):
             stat_objects = RegionStat.objects.filter(region=region, year=year)
             for current in stat_objects:
                 if current.accident_type in accident_number.keys():
-                    accident_number[str(current.accident_type)] += current.get_stat_number('all')
+                    accident_number[str(current.accident_type)] += current.get_stat_number(stat_type)
 
     data = [[u'Причина ДТП', u'Число пострадавших']] + [[get_accident_name_by_type(current),
                                                          accident_number[current]] for current in accident_number.keys()]
@@ -221,11 +224,13 @@ def sankey_chart(request):
                                                               "parameters_title": u'Параметры',
                                                               "info_header": u'Информация',
                                                               "regions": get_region_list_for_select(),
+                                                              "stat_types": stat_types,
                                                               "years": [x for x in range(min_year, max_year + 1)]})
 
 
-def sankey_chart_url(request, regions, from_year, to_year):
-    parameters = [(u'Регионы', regions), (u'С', from_year), (u'По', to_year)]
+def sankey_chart_url(request, regions, stat_type, from_year, to_year):
+    stat_name = get_stat_name_by_type(stat_type)
+    parameters = [(u'Регионы', regions), (u'Наблюдаемая величина', stat_name), (u'С', from_year), (u'По', to_year)]
     return render_to_response('sankey_chart_by_url.html', {"type": "sankey_chart",
                                                            "title": u'Статистика ДТП',
                                                            "chart_title": u'Потоковая диаграмма причин ДТП',
@@ -235,7 +240,7 @@ def sankey_chart_url(request, regions, from_year, to_year):
                                                            "url": request.path})
 
 
-def sankey_chart_data(request, regions, from_year, to_year):
+def sankey_chart_data(request, regions, stat_type, from_year, to_year):
     regions = regions.split(",")
     from_year = int(from_year)
     to_year = int(to_year)
@@ -258,14 +263,15 @@ def sankey_chart_data(request, regions, from_year, to_year):
         for year in range(from_year, to_year + 1):
             stat_objects = RegionStat.objects.filter(region=region, year=year)
             for current in stat_objects:
-                accident_number[str(current.accident_type)] += current.get_stat_number('all')
+                accident_number[str(current.accident_type)] += current.get_stat_number(stat_type)
     all_name = get_accident_name_by_type('all')
     driver_name = get_accident_name_by_type('driver')
     broken_name = get_accident_name_by_type('broken')
     roads_name = get_accident_name_by_type('roads')
     pedestrian_name = get_accident_name_by_type('pedestrian')
     driver_and_pedestrian_name = u'ДТП по вине водителей и пешеходов'
-    data = [[all_name, broken_name, accident_number['broken']],
+    data = [['От', 'К', 'Число ДТП'],
+            [all_name, broken_name, accident_number['broken']],
             [all_name, roads_name, accident_number['roads']],
             [all_name, driver_and_pedestrian_name, accident_number['driver'] + accident_number['pedestrian']],
             [broken_name, ' ', -1],

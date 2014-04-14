@@ -1,8 +1,18 @@
 {% extends 'charts/chart_with_form.html' %}
 {% block params %}
-<form class="form-horizontal">
+<div class="form-horizontal">
     <fieldset>
         {% include 'region_and_period.html' %}
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="statType">Наблюдаемая величина</label>
+            <div class="col-md-4">
+                <select id="statType" class="form-control">
+                    {% for stat_type in stat_types %}
+                        <option value="{{ stat_type.0 }}">{{ stat_type.1 }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
         <div class="form-group">
             <label class="col-md-4 control-label" for="showButton"></label>
             <div class="col-md-4">
@@ -12,22 +22,28 @@
             </div>
         </div>
     </fieldset>
-</form>
+</div>
 {% endblock %}
 
 {% block additional_js %}
     <script type="text/javascript">
         function getURL() {
-            return "regions/" + getSelectedRegions() + "/from_year/" + $("#fromYear").val() +
+            return "regions/" + getSelectedRegions() +
+                    "/stat_type/" + $("#statType").val() +
+                    "/from_year/" + $("#fromYear").val() +
                     "/to_year/" + $("#toYear").val();
         }
         function callShow() {
             show(function(data) {
-                var dataTable = google.visualization.arrayToDataTable(data.chart_data);
-                chart = drawWithParameters(chart, 'chart', 'pie', dataTable, data.chart_title);
+                drawWithParameters({
+                    chartObject: chart,
+                    chartDiv: 'chart',
+                    chartTypeName: 'pie',
+                    data: data.chart_data,
+                    title: data.chart_title
+                });
                 $("#url").text(getFullURL(getURL()));
-                info = drawTable(info, 'info', dataTable);
-            })
+            });
         }
     </script>
 {% endblock %}

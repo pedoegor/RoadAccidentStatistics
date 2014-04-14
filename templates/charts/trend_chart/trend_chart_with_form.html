@@ -1,6 +1,6 @@
 {% extends 'charts/chart_with_form.html' %}
 {% block params %}
-<form class="form-horizontal">
+<div class="form-horizontal">
     <fieldset>
         {% include 'region_and_period.html' %}
         <div class="form-group">
@@ -62,7 +62,7 @@
             </div>
         </div>
     </fieldset>
-</form>
+</div>
 {% endblock %}
 
 {% block additional_js %}
@@ -75,15 +75,22 @@
                     "/trend_type/" + $("#trendType").val() +
                     "/accident_type/" + $("#accidentType").val() +
                     "/stat_type/" + $("#statType").val() +
-                    "/scale_type/" + $("#scaleType").val();;
+                    "/scale_type/" + $("#scaleType").val();
         }
         function callShow() {
             show(function(data) {
-                var dataTable = google.visualization.arrayToDataTable(data.chart_data);
-                chart = drawWithParameters(chart, 'chart', data.chart_type, dataTable, data.chart_title,
-                        data.xAxis_title, data.yAxis_title, data.trend_type, data.chart_data[0].length - 1);
+                drawWithParameters({
+                    chartObject: chart,
+                    chartDiv: 'chart',
+                    chartTypeName: data.chart_type,
+                    data: data.chart_data,
+                    title: data.chart_title,
+                    hAxisTitle: data.xAxis_title,
+                    vAxisTitle: data.yAxis_title,
+                    trendType: data.trend_type,
+                    trendNumber: data.chart_data[0].length - 1
+                });
                 $("#url").text(getFullURL(getURL()));
-                info = drawTable(info, 'info', dataTable);
             })
         }
     </script>

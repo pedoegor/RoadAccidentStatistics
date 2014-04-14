@@ -3,9 +3,13 @@
     <script type="text/javascript">
         $(document).ready(function(){
             show(function(data) {
-                var dataTable = google.visualization.arrayToDataTable(data.chart_data);
-                chart = drawWithParameters(chart, 'chart', 'pie', dataTable, data.chart_title);
-                info = drawTable(info, 'info', dataTable);
+                drawWithParameters({
+                    chartObject: chart,
+                    chartDiv: 'chart',
+                    chartTypeName: 'pie',
+                    data: data.chart_data,
+                    title: data.chart_title
+                });
             });
         });
     </script>

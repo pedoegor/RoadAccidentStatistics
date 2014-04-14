@@ -1,52 +1,57 @@
-function getOptions(title, xAxisTitle, yAxisTitle, trendType, trendLineNumber) {
+function getOptions(title, hAxisTitle, vAxisTitle, minH, minV, maxH, maxV, trendType, trendLineNumber) {
     trendlines = {};
-    if (trendType != "no") {
+    if (trendType != null && trendType != "no") {
         for(var i = 0; i < trendLineNumber; i++) {
             trendlines[i] = {type: trendType};
         }
     }
     return {
         title: title,
-        hAxis: {title: xAxisTitle},
-        vAxis: {title: yAxisTitle},
+        hAxis: {title: hAxisTitle, minValue: minH, maxValue: maxH},
+        vAxis: {title: vAxisTitle, minValue: minV, maxValue: maxV},
+        bubble: {
+            textStyle: {
+                fontSize: 10
+            }
+        },
         trendlines: trendlines
     };
 }
 chartObjectMap = {};
-chartObjectMap["area"] = function(chartDiv, title, xAxisTitle, yAxisTitle, trendType, trendLineNumber) {
+chartObjectMap["area"] = function(chartDiv, title, hAxisTitle, vAxisTitle, minH, minV, maxH, maxV, trendType, trendLineNumber) {
     return {
         object: new google.visualization.AreaChart(document.getElementById(chartDiv)),
-        options: getOptions(title, xAxisTitle, yAxisTitle, trendType, trendLineNumber)
+        options: getOptions(title, hAxisTitle, vAxisTitle, minH, minV, maxH, maxV, trendType, trendLineNumber)
     };
 };
-chartObjectMap["line"] = function(chartDiv, title, xAxisTitle, yAxisTitle, trendType, trendLineNumber) {
+chartObjectMap["line"] = function(chartDiv, title, hAxisTitle, vAxisTitle, minH, minV, maxH, maxV, trendType, trendLineNumber) {
     return {
         object: new google.visualization.LineChart(document.getElementById(chartDiv)),
-        options: getOptions(title, xAxisTitle, yAxisTitle, trendType, trendLineNumber)
+        options: getOptions(title, hAxisTitle, vAxisTitle, minH, minV, maxH, maxV, trendType, trendLineNumber)
     };
 };
-chartObjectMap["column"] = function(chartDiv, title, xAxisTitle, yAxisTitle, trendType, trendLineNumber) {
+chartObjectMap["column"] = function(chartDiv, title, hAxisTitle, vAxisTitle, minH, minV, maxH, maxV, trendType, trendLineNumber) {
     return {
         object: new google.visualization.ColumnChart(document.getElementById(chartDiv)),
-        options: getOptions(title, xAxisTitle, yAxisTitle, trendType, trendLineNumber)
+        options: getOptions(title, hAxisTitle, vAxisTitle, minH, minV, maxH, maxV, trendType, trendLineNumber)
     };
 };
-chartObjectMap["point"] = function(chartDiv, title, xAxisTitle, yAxisTitle, trendType, trendLineNumber) {
+chartObjectMap["point"] = function(chartDiv, title, hAxisTitle, vAxisTitle, minH, minV, maxH, maxV, trendType, trendLineNumber) {
     return {
         object: new google.visualization.ScatterChart(document.getElementById(chartDiv)),
-        options: getOptions(title, xAxisTitle, yAxisTitle, trendType, trendLineNumber)
+        options: getOptions(title, hAxisTitle, vAxisTitle, minH, minV, maxH, maxV, trendType, trendLineNumber)
     };
 };
-chartObjectMap["bar"] = function(chartDiv, title, xAxisTitle, yAxisTitle, trendType, trendLineNumber) {
+chartObjectMap["bar"] = function(chartDiv, title, hAxisTitle, vAxisTitle, minH, minV, maxH, maxV, trendType, trendLineNumber) {
     return {
         object: new google.visualization.BarChart(document.getElementById(chartDiv)),
-        options: getOptions(title, yAxisTitle, xAxisTitle, trendType, trendLineNumber)
+        options: getOptions(title, vAxisTitle, hAxisTitle, minH, minV, maxH, maxV, trendType, trendLineNumber)
     };
 };
-chartObjectMap["bubble"] = function(chartDiv, title, xAxisTitle, yAxisTitle, trendType, trendLineNumber) {
+chartObjectMap["bubble"] = function(chartDiv, title, hAxisTitle, vAxisTitle, minH, minV, maxH, maxV) {
     return {
         object: new google.visualization.BubbleChart(document.getElementById(chartDiv)),
-        options: getOptions(title, xAxisTitle, yAxisTitle, trendType, trendLineNumber)
+        options: getOptions(title, vAxisTitle, hAxisTitle, minH, minV, maxH, maxV)
     };
 };
 chartObjectMap["sankey"] = function(chartDiv) {
@@ -80,20 +85,47 @@ chartObjectMap["pie"] = function(chartDiv, title) {
         }
     };
 };
-function drawWithParameters(chartObject, chartDiv, chartTypeName, data, title, xAxisTitle, yAxisTitle, trendType, trendNumber) {
-    if (chartObject != null) {
-        chartObject.clearChart();
+
+function findMin(data, index) {
+    var min = 10000000;
+    for(var i = 0; i < data.length; i++) {
+        if(data[i][index] < min) min = data[i][index];
     }
-    chartContext = chartObjectMap[chartTypeName](chartDiv, title, xAxisTitle, yAxisTitle, trendType, trendNumber);
-    chartObject = chartContext.object;
-    chartObject.draw(data, chartContext.options);
-    return chartObject;
+    return min;
 }
+
+function findMax(data, index) {
+    var max = -10000000;
+    for(var i = 0; i < data.length; i++) {
+        if(data[i][index] > max) max = data[i][index];
+    }
+    return max;
+}
+
 function drawTable(tableObject, tableDiv, data) {
     if (tableObject != null) {
         tableObject.clearChart();
     }
     tableObject = new google.visualization.Table(document.getElementById(tableDiv));
     tableObject.draw(data, {showRowNumber: true});
-    return tableObject;
 }
+
+//chartObject, chartDiv, chartTypeName, data, title, hAxisTitle, vAxisTitle, hValueIndex, vValueIndex, trendType, trendNumber
+function drawWithParameters(opts) {
+    if (opts.chartObject != null) {
+        opts.chartObject.clearChart();
+    }
+    if(opts.hValueIndex != null) {
+        var minH = findMin(opts.data, opts.hValueIndex);
+        var minV = findMin(opts.data, opts.vValueIndex);
+        var maxH = findMax(opts.data, opts.hValueIndex);
+        var maxV = findMax(opts.data, opts.vValueIndex);
+    }
+    var dataTable = google.visualization.arrayToDataTable(opts.data);
+    chartContext = chartObjectMap[opts.chartTypeName](opts.chartDiv, opts.title, opts.hAxisTitle, opts.vAxisTitle,
+        minH - minH / 10, minV - minV / 10, maxH + maxH / 10, maxV + maxV / 10, opts.trendType, opts.trendNumber);
+    opts.chartObject = chartContext.object;
+    opts.chartObject.draw(dataTable, chartContext.options);
+    if(opts.drawTable == null || opts.drawTable == true)drawTable(info, 'info', dataTable);
+}
+

@@ -1,8 +1,18 @@
 {% extends 'charts/chart_with_form.html' %}
 {% block params %}
-<form class="form-horizontal">
+<div class="form-horizontal">
     <fieldset>
         {% include 'region_and_period.html' %}
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="statType">Наблюдаемая величина</label>
+            <div class="col-md-4">
+                <select id="statType" class="form-control">
+                    {% for stat_type in stat_types %}
+                        <option value="{{ stat_type.0 }}">{{ stat_type.1 }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
         <div class="form-group">
             <label class="col-md-4 control-label" for="showButton"></label>
             <div class="col-md-4">
@@ -12,37 +22,40 @@
             </div>
         </div>
     </fieldset>
-</form>
+</div>
 {% endblock %}
 
 {% block additional_js %}
     <script type="text/javascript">
         function getURL() {
-            return "regions/" + getSelectedRegions() + "/from_year/" + $("#fromYear").val() +
+            return "regions/" + getSelectedRegions() +
+                    "/stat_type/" + $("#statType").val() +
+                    "/from_year/" + $("#fromYear").val() +
                     "/to_year/" + $("#toYear").val();
         }
         function callShow() {
             show(function(data) {
-                var dataTable = new google.visualization.DataTable();
-                dataTable.addColumn('string', 'От');
-                dataTable.addColumn('string', 'К');
-                dataTable.addColumn('number', 'Количество ДТП');
-                dataTable.addRows(data.chart_data);
-                chart = drawWithParameters(chart, 'chart', 'sankey', dataTable);
+                chart = drawWithParameters({
+                    chartObject: chart,
+                    chartDiv: 'chart',
+                    chartTypeName: 'sankey',
+                    data: data.chart_data
+                });
                 $("#url").text(getFullURL(getURL()));
                 var infoData = [];
-                for (var i = 0; i < data.chart_data.length; i++) {
+                for (var i = 1; i < data.chart_data.length; i++) {
                     if(data.chart_data[i][2] > 0){
                         infoData[infoData.length] = data.chart_data[i];
                     }
                 }
                 var infoDataTable = new google.visualization.DataTable();
-                infoDataTable.addColumn('string', 'От');
-                infoDataTable.addColumn('string', 'К');
-                infoDataTable.addColumn('number', 'Количество ДТП');
+                infoDataTable.addColumn('string', data.chart_data[0][0]);
+                infoDataTable.addColumn('string', data.chart_data[0][1]);
+                infoDataTable.addColumn('number', data.chart_data[0][2]);
                 infoDataTable.addRows(infoData);
-                info = drawTable(info, 'info', infoDataTable);
-            })
+                drawTable(window.info, 'info', infoDataTable);
+            });
+            return false;
         }
     </script>
 {% endblock %}

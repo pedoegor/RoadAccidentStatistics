@@ -3,24 +3,26 @@
     <script type="text/javascript">
         $(document).ready(function(){
             show(function(data) {
-                var dataTable = new google.visualization.DataTable();
-                dataTable.addColumn('string', 'От');
-                dataTable.addColumn('string', 'К');
-                dataTable.addColumn('number', 'Количество ДТП');
-                dataTable.addRows(data.chart_data);
-                chart = drawWithParameters(chart, 'chart', 'sankey', dataTable);
+                chart = drawWithParameters({
+                    chartObject: chart,
+                    chartDiv: 'chart',
+                    chartTypeName: 'sankey',
+                    data: data.chart_data,
+                    drawTable: false
+                });
+                $("#url").text(getFullURL(getURL()));
                 var infoData = [];
-                for (var i = 0; i < data.chart_data.length; i++) {
+                for (var i = 1; i < data.chart_data.length; i++) {
                     if(data.chart_data[i][2] > 0){
                         infoData[infoData.length] = data.chart_data[i];
                     }
                 }
                 var infoDataTable = new google.visualization.DataTable();
-                infoDataTable.addColumn('string', 'От');
-                infoDataTable.addColumn('string', 'К');
-                infoDataTable.addColumn('number', 'Количество ДТП');
+                infoDataTable.addColumn('string', data.chart_data[0][0]);
+                infoDataTable.addColumn('string', data.chart_data[0][1]);
+                infoDataTable.addColumn('number', data.chart_data[0][2]);
                 infoDataTable.addRows(infoData);
-                info = drawTable(info, 'info', infoDataTable);
+                drawTable(window.info, 'info', infoDataTable);
             });
         });
     </script>

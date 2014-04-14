@@ -3,10 +3,17 @@
     <script type="text/javascript">
         $(document).ready(function(){
             show(function(data) {
-                var dataTable = google.visualization.arrayToDataTable(data.chart_data);
-                chart = drawWithParameters(chart, 'chart', 'bubble', dataTable, data.chart_title, data.xAxis_title,
-                        data.yAxis_title, 'no');
-                info = drawTable(info, 'info', dataTable);
+                chart = drawWithParameters({
+                    chartObject: chart,
+                    chartDiv: 'chart',
+                    chartTypeName: 'bubble',
+                    data: data.chart_data,
+                    hValueIndex: 1,
+                    vValueIndex: 2,
+                    title: data.chart_title,
+                    hAxisTitle: data.xAxis_title,
+                    vAxisTitle: data.yAxis_title
+                });
             });
         });
     </script>
