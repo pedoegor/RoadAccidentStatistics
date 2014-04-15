@@ -1,4 +1,4 @@
-__author__ = 'vio'
+__author__ = 'viosng'
 from RoadAccidentStatistics.views import *
 
 

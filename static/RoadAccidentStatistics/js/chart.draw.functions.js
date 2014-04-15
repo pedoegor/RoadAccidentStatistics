@@ -126,6 +126,9 @@ function drawWithParameters(opts) {
         minH - minH / 10, minV - minV / 10, maxH + maxH / 10, maxV + maxV / 10, opts.trendType, opts.trendNumber);
     opts.chartObject = chartContext.object;
     opts.chartObject.draw(dataTable, chartContext.options);
+    if(opts.chartTypeName == 'pie'){
+        google.visualization.events.addListener(opts.chartObject, 'select', function(){alert(opts.chartObject.getSelection()[0].row)});
+    }
     if(opts.drawTable == null || opts.drawTable == true)drawTable(info, 'info', dataTable);
 }
 

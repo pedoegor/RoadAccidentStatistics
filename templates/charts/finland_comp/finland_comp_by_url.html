@@ -1,0 +1,20 @@
+{% extends 'charts/chart_by_url.html' %}
+{% block additional_js %}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            show(function(data) {
+                drawWithParameters({
+                    chartObject: chart,
+                    chartDiv: 'chart',
+                    chartTypeName: data.chart_type,
+                    data: data.chart_data,
+                    title: data.chart_title,
+                    hAxisTitle: data.xAxis_title,
+                    vAxisTitle: data.yAxis_title,
+                    trendType: data.trend_type,
+                    trendNumber: data.chart_data[0].length - 1
+                });
+            });
+        });
+    </script>
+{% endblock %}
