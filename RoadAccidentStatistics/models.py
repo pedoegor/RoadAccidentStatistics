@@ -59,5 +59,7 @@ class RegionPopulation(models.Model):
         return u'RegionPopulation: %s, population: %s, year: %s' % (self.region.name, self.population, self.year)
 
 
-class DownloadFile(models.Model):
+class DownloadedFile(models.Model):
     name = models.CharField(max_length=200)
+    def __unicode__(self):
+         return self.name

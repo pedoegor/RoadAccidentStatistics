@@ -2,6 +2,7 @@ from django.conf.urls import patterns, include, url
 from RoadAccidentStatistics.views import *
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.contrib import admin
+
 admin.autodiscover()
 
 urlpatterns = patterns('',
@@ -26,5 +27,6 @@ urlpatterns = patterns('',
     url(r'^finland_comp/regions/([\w ,]+)/from_year/(\d{4})/to_year/(\d{4})/chart_type/(\w+)/trend_type/(\w+)/stat_type/(\w+)/scale_type/(\w+)/data', finland_comp_data),
     url(r'^finland_comp/regions/([\w ,]+)/from_year/(\d{4})/to_year/(\d{4})/chart_type/(\w+)/trend_type/(\w+)/stat_type/(\w+)/scale_type/(\w+)', finland_comp_url),
     url(r'^finland_comp/', finland_comp),
+
 )
 urlpatterns += staticfiles_urlpatterns()
