@@ -13,12 +13,26 @@
     <script src="{% static 'RoadAccidentStatistics/js/spin.min.js' %}" type="text/javascript"></script>
     <script src="{% static 'RoadAccidentStatistics/js/ladda.min.js' %}" type="text/javascript"></script>
     <script type="text/javascript">
+        function fillYears(selectorName, fromYear, toYear) {
+            var html = '';
+            for(var i = fromYear; i <= toYear; i++){
+                html += '<option value="' + i + '">' + i + '</option>';
+            }
+            $('#' + selectorName).html(html);
+        }
+        $(document).ready(function(){
+            fillYears('fromYear', {{ from_year }}, {{ to_year }});
+            fillYears('toYear', {{ from_year }}, {{ to_year }});
+            $('#hidden').hide();
+        });
         var button = Ladda.create(document.getElementById("showButton"));
         function startLoadAnimation() {
             button.start();
+            $('#hidden').hide();
         }
         function stopLoadAnimation() {
             button.stop();
+            $('#hidden').show();
         }
     </script>
     {% block additional_js %}{% endblock %}

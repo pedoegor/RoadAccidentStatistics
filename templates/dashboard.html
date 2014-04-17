@@ -1,16 +1,21 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>{{ title }}</title>
-    {% include 'common.css.html' %}
-</head>
-<body>
-    {% include 'navigation.html' %}
+{% extends 'default_page.html' %}
+{% block body %}
     {% load staticfiles %}
     <div class="container">
         <div class="jumbotron">
             <h1>{{ title }}</h1>
-            <p>Описание проекта</p>
+            <p> &nbsp;&nbsp;&nbsp;&nbsp;Система «Статистика ДТП» – проект студентов кафедры Cистемного программирования
+                Математико-механического факультета СПбГУ.<br>
+
+                &nbsp;&nbsp;&nbsp;&nbsp;<strong>Цель проекта</strong> - познакомить пользователя со статистикой ДТП в регионах Российской Федерации,
+                предоставить возможность для ее визуализации и сравнения со статистическими показателями ДТП в Финляндии.<br>
+
+                &nbsp;&nbsp;&nbsp;&nbsp;На данном сайте Вы можете подробно ознакомиться со статистическими данными ДТП,
+                взятыми с <a href="http://www.gibdd.ru/">сайта Госавтоинспекции МВД России</a> и с
+                <a href="http://www.stat.fi/index_en.html">сайта статистики по Финляндии</a> в графическом и текстовом виде.<br>
+
+                &nbsp;&nbsp;&nbsp;&nbsp; Ниже представлены способы визуализации с описанием и ссылками на страницы с
+            соответствующим функционалом.</p>
             <div class="row">
                 <div class="col-sm-6 col-md-6">
                     <div class="thumbnail">
@@ -72,6 +77,4 @@
             </div>
         </div>
     </div>
-    {% include 'common.js.html' %}
-</body>
-</html>
+{% endblock %}

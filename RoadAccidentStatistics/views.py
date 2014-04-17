@@ -42,7 +42,8 @@ def bubble_chart(request):
                                                               "parameters_title": u'Параметры',
                                                               "info_header": u'Информация',
                                                               "regions": get_region_list_for_select(),
-                                                              "years": [x for x in range(min_year, max_year + 1)]})
+                                                              "from_year": min_year,
+                                                              "to_year": max_year})
 
 
 def bubble_chart_url(request, regions, from_year, to_year):
@@ -94,7 +95,8 @@ def trend_chart(request):
                                                              "parameters_title": u'Параметры',
                                                              "info_header": u'Информация',
                                                              "regions": get_region_list_for_select(),
-                                                             "years": [x for x in range(min_year, max_year + 1)],
+                                                             "from_year": min_year,
+                                                             "to_year": max_year,
                                                              "accident_types": accident_types,
                                                              "stat_types": stat_types,
                                                              "chart_types": chart_types,
@@ -186,7 +188,8 @@ def pie_chart(request):
                                                            "info_header": u'Информация',
                                                            "regions": get_region_list_for_select(),
                                                            "stat_types": stat_types,
-                                                           "years": [x for x in range(min_year, max_year + 1)]})
+                                                           "from_year": min_year,
+                                                           "to_year": max_year})
 
 
 def pie_chart_url(request, regions, stat_type, from_year, to_year):
@@ -239,7 +242,8 @@ def sankey_chart(request):
                                                               "info_header": u'Информация',
                                                               "regions": get_region_list_for_select(),
                                                               "stat_types": stat_types,
-                                                              "years": [x for x in range(min_year, max_year + 1)]})
+                                                              "from_year": min_year,
+                                                              "to_year": max_year})
 
 
 def sankey_chart_url(request, regions, stat_type, from_year, to_year):
@@ -309,16 +313,17 @@ def finland_comp(request):
     max_year = 2012
 
     return render_to_response('finland_comp_with_form.html', {"type": "finland_comp",
-                                                             "title": u'Статистика ДТП',
-                                                             "chart_title": u'Сравнение со статистикой ДТП в Финляндии',
-                                                             "parameters_title": u'Параметры',
-                                                             "info_header": u'Информация',
-                                                             "regions": get_region_list_for_select(True),
-                                                             "years": [x for x in range(min_year, max_year + 1)],
-                                                             "stat_types": get_finland_types(stat_types),
-                                                             "chart_types": chart_types,
-                                                             "trend_types": trend_types,
-                                                             "scale_types": get_finland_types(scale_types)})
+                                                              "title": u'Статистика ДТП',
+                                                              "chart_title": u'Сравнение со статистикой ДТП в Финляндии',
+                                                              "parameters_title": u'Параметры',
+                                                              "info_header": u'Информация',
+                                                              "regions": get_region_list_for_select(True),
+                                                              "from_year": min_year,
+                                                              "to_year": max_year,
+                                                              "stat_types": get_finland_types(stat_types),
+                                                              "chart_types": chart_types,
+                                                              "trend_types": trend_types,
+                                                              "scale_types": get_finland_types(scale_types)})
 
 
 def finland_comp_url(request, regions, from_year, to_year, chart_type, trend_type, stat_type, scale_type):

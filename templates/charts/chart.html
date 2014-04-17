@@ -1,12 +1,5 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>{{ title }}</title>
-    {% include 'common.css.html' %}
-    {% block css %}{% endblock %}
-</head>
-<body>
-    {% include 'navigation.html' %}
+{% extends 'default_page.html' %}
+{% block body %}
     <div class="container">
         <div class="page-header">
             <h1>{{ chart_title }}</h1>
@@ -19,20 +12,12 @@
 
         <div id="chart" style="width: 100%; height: 600px;"></div>
 
-    {% block url %}{% endblock %}
-
-    <div class="page-header">
-        <h2>{{ info_header }}</h2>
-    </div>
-    <div id="info"></div>
-    </div>
-    <footer style="padding-top: 40px">
-        <div class="container">
-            <hr/>
-            <p>СПбГУ 2014</p>
+        <div id="hidden">
+            <div class="page-header">
+                <h2>{{ info_header }}</h2>
+            </div>
+            <div id="info"></div>
+            {% block url %}{% endblock %}
         </div>
-    </footer>
-    {% include 'common.js.html' %}
-    {% block js %}{% endblock %}
-</body>
-</html>
+    </div>
+{% endblock %}

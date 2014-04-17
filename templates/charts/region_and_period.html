@@ -15,21 +15,13 @@
                     <div class="form-group">
                         <label class="col-md-2 control-label" for="fromYear">С</label>
                         <div class="col-md-4">
-                            <select id="fromYear" class="form-control">
-                            {% for year in years %}
-                                <option value="{{ year }}" {% if year == forloop.first %}selected{% endif %}>{{ year }}</option>
-                            {% endfor %}
-                            </select>
+                            <select id="fromYear" class="form-control" onchange="fillYears('toYear', this.value, {{ to_year }})"></select>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-2 control-label" for="toYear">По</label>
                         <div class="col-md-4">
-                            <select id="toYear" class="form-control">
-                            {% for year in years %}
-                                <option value="{{ year }}" {% if year == forloop.last %}selected{% endif %}>{{ year }}</option>
-                            {% endfor %}
-                            </select>
+                            <select id="toYear" class="form-control" onchange="fillYears('fromYear', {{ from_year }}, this.value)"></select>
                         </div>
                     </div>
                 </fieldset>
