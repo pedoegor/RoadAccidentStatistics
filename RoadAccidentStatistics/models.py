@@ -2,6 +2,7 @@
 from django.db import models
 from utils.chart_support_types import *
 
+
 class Region(models.Model):
     name = models.CharField(max_length=100)
     english_name = models.CharField(max_length=100, blank=True)
@@ -61,5 +62,6 @@ class RegionPopulation(models.Model):
 
 class DownloadedFile(models.Model):
     name = models.CharField(max_length=200)
+
     def __unicode__(self):
          return self.name

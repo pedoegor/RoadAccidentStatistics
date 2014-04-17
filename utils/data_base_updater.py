@@ -1,30 +1,13 @@
 # -*- coding: utf-8 -*-
-
-
-from RoadAccidentStatistics.models import *
 from RoadAccidentStatistics.views import *
-
-
-from chart_support_types import *
-
-
+from RoadAccidentStatistics.models import *
+import finland_stats
 import sys
 import xlrd
 
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
-
-
-#checks if input region name is correct
-def if_region_identified(name):
-    return name in regions_and_parents.keys()
-
-
-#gets parent region name
-def get_parent_name(name):
-    return regions_and_parents[name]
-
 
 #period
 from_year = 2004
@@ -35,13 +18,22 @@ to_year = 2013
 active_regions_list = []
 
 
+#checks if input region name is correct
+def if_region_identified(name):
+    return name in parents.keys()
+
+
+#gets parent region name
+def get_parent_name(name):
+    return parents[name]
+
+
 #return result_list that contains numbers of 'абс.' columns
 def get_proper_columns(file_name, table_number):
-
     result_list = []
 
-    file = xlrd.open_workbook(file_name, formatting_info=True)
-    table = file.sheet_by_index(table_number)
+    xls_file = xlrd.open_workbook(file_name, formatting_info=True)
+    table = xls_file.sheet_by_index(table_number)
 
     for row in range(0, 5):
 
@@ -84,200 +76,127 @@ def cast_float(string):
         return 0.0
 
 
-#load regions structure from regions_and_parents to base
+#load regions structure from parents to base
 def load_regions_db():
     for region in regions:
         #print region
-        new_region = Region()
-        new_region.name = region
-        new_region.parent = None
-
-        if not (parents[region] is None):
-            new_region.parent = get_region_by_name(parents[region])
-
-        new_region.save()
+        Region.objects.create(name=region, parent=get_region_by_name(parents.get(region)))
 
         active_regions_list.append(False)
 
 
-#loads to db info about regions (ONLY REASON TABLES) from .xls ||||  file -  path & name of .xls, table - table number, year - year
-def load_region_reason_db(file, table, year):
+#loads to db info about regions (ONLY REASON TABLES) from .xls
+def load_region_reason_db(file_name_with_path, table_index, year):
+    columns = get_proper_columns(file_name_with_path, table_index)
 
-    columns = get_proper_columns(file, table)
-
-    f = xlrd.open_workbook(filee, formatting_info=True)
-    t = f.sheet_by_index(table)
+    xls_file_object = xlrd.open_workbook(file_name_with_path, formatting_info=True)
+    sheet = xls_file_object.sheet_by_index(table_index)
+    reason = reasons[table_index]
 
     #if table is number  0 then we should set list of active regions
-    if table == 0:
+    if table_index == 0:
 
         #set active regions list for .xls to [False, False, ...]
-        for i in range(0, len(active_regions_list)):
+        for i in range(len(active_regions_list)):
             active_regions_list[i] = False
 
-        for row in range(4, t.nrows):
+    for row in range(4, sheet.nrows):
 
-            #get region name
-            c0 = str(t.cell_value(row, 0)).replace('*', '')
-            name = c0.strip()
+        #get region name
+        name = str(sheet.cell_value(row, 0)).replace('*', '').strip()
+        if not if_region_identified(name):
+            continue
 
-            if not if_region_identified(name):
-                continue
+        #set region as active
+        if table_index == 0:
+            active_regions_list[regions.index(name)] = True
 
-            #set region as active
-            index = regions.index(name)
-            active_regions_list[index] = True
+        #load region statistics
+        RegionStat.objects.create(region=get_region_by_name(name),
+                                  year=year,
+                                  accident_type=reason,
+                                  dead_number=cast_int(sheet.cell_value(row, columns[1])),
+                                  injured_number=cast_int(sheet.cell_value(row, columns[2])),
+                                  accident_number=cast_int(sheet.cell_value(row, columns[0])))
 
-            #load region statistics
-            stat = RegionStat()
+        if name == u'Дальневосточный округ':
+            break
 
-            stat.region = get_region_by_name(name)
-            stat.year = year
-            stat.accident_type = reasons[table]
-            stat.dead_number = cast_int(t.cell_value(row, columns[1]))
-            stat.injured_number = cast_int(t.cell_value(row, columns[2]))
-            stat.accident_number = cast_int(t.cell_value(row, columns[0]))
-
-            stat.save()
-
-            if name == u'Дальневосточный округ':
-                break
-
-        #now load data for regions that are not active in current .xls
-        for i in range(0, len(active_regions_list)):
-            if not active_regions_list[i]:
-
-                stat = RegionStat()
-
-                stat.region = get_region_by_name(regions[i])
-                stat.year = year
-                stat.accident_type = reasons[table]
-                stat.dead_number = 0
-                stat.injured_number = 0
-                stat.accident_number = 0
-
-                stat.save()
-
-    else:
-
-        for row in range(4, t.nrows):
-
-            #get region name
-            c0 = str(t.cell_value(row, 0)).replace('*', '')
-            name = c0.strip()
-
-            if not if_region_identified(name):
-                continue
-
-            #load region statistics
-            stat = RegionStat()
-
-            stat.region = get_region_by_name(name)
-            stat.year = year
-            stat.accident_type = reasons[table]
-            stat.dead_number = cast_int(t.cell_value(row, columns[1]))
-            stat.injured_number = cast_int(t.cell_value(row, columns[2]))
-            stat.accident_number = cast_int(t.cell_value(row, columns[0]))
-
-            stat.save()
-
-            if name == u'Дальневосточный округ':
-                break
-
-
-        #now load data for regions that are not active in current .xls
-        for i in range(0, len(active_regions_list)):
-            if not active_regions_list[i]:
-
-                stat = RegionStat()
-
-                stat.region = get_region_by_name(regions[i])
-                stat.year = year
-                stat.accident_type = reasons[table]
-                stat.dead_number = 0
-                stat.injured_number = 0
-                stat.accident_number = 0
-
-                stat.save()
+            #now load data for regions that are not active in current .xls
+    for i in range(len(active_regions_list)):
+        if not active_regions_list[i]:
+            RegionStat.objects.create(region=get_region_by_name(regions[i]),
+                                      year=year,
+                                      accident_type=reason,
+                                      dead_number=0,
+                                      injured_number=0,
+                                      accident_number=0)
 
 
 #IN THIS METHOD YOU SHOULD SET YOUR EXPRESSION !!!!!!!!!! NICK !!!!! DO YOU HEAR ME????!!!!!!!!!!!!!!!!
-#loads region statistics about population and accidents (ONLY TABLE # 1) ||||  file -  path & name of .xls, table - table number, year - year
-def load_region_transport_and_population_db(file, table, year):
+#loads region statistics about population and accidents (ONLY TABLE # 1)
+def load_region_transport_and_population_db(file_name_with_path, table_index, year):
+    columns = get_proper_columns(file_name_with_path, table_index)
 
-    columns = get_proper_columns(file, table)
+    xls_file_object = xlrd.open_workbook(file_name_with_path, formatting_info=True)
+    sheet = xls_file_object.sheet_by_index(table_index)
 
-    f = xlrd.open_workbook(filee, formatting_info=True)
-    t = f.sheet_by_index(table)
-
-
-    for row in range(4, t.nrows):
+    all_stat_data = RegionStat.objects.filter(year=year, accident_type='all').all()
+    for row in range(4, sheet.nrows):
 
         #get region name
-        c0 = str(sheet.cell_value(row, 0)).replace('*', '')
-        name = c0.strip()
+        name = str(sheet.cell_value(row, 0)).replace('*', '').strip()
 
         if not if_region_identified(name):
             continue
 
+        region = get_region_by_name(name)
+        region_stat = all_stat_data.filter(region=region)[0]
+
         #load region POPULATION
-        population = RegionPopulation()
-
-        population.region = get_region_by_name(name)
-        population.year = year
-        population.population = 0 #HERE YOUR EXPRESSION DADA FROM TABLE THAT YOU NEED IS :  cast_float(t.cell_value(row, columns[0]))
-
-        population.save()
+        cell_value = cast_float(sheet.cell_value(row, columns[1]))
+        RegionPopulation.objects.create(region=region,
+                                        year=year,
+                                        population=(0 if cell_value == 0.0
+                                                    else region_stat.get_stat_number('hurt') * 100000 / cell_value))
 
         #load region TRANSPORT
-        transport = RegionCrashedTransport()
-
-        transport.region = population.region
-        transport.year = year
-        transport.crashed_transport_number = 0 #HERE YOUR EXPRESSION DADA FROM TABLE THAT YOU NEED IS :  cast_float(t.cell_value(row, columns[1]))
-
-        transport.save()
-
+        cell_value = cast_float(sheet.cell_value(row, columns[0]))
+        RegionCrashedTransport.objects.create(region=region,
+                                              year=year,
+                                              crashed_transport_number=(
+                                                  0 if cell_value == 0.0 else region_stat.accident_number * 10000 / cell_value))
         if name == u'Дальневосточный округ':
-                break
-
+            break
 
     #now load data for regions that are not active in current .xls
-    for i in range(0, len(active_regions_list)):
+    for i in range(len(active_regions_list)):
         if not active_regions_list[i]:
+            region = get_region_by_name(regions[i])
 
-            #load region POPULATION
-            population = RegionPopulation()
+            RegionPopulation.objects.create(region=region,
+                                            year=year,
+                                            population=0)
 
-            population.region = get_region_by_name(regions[i])
-            population.year = year
-            population.population = 0
-
-            population.save()
-
-            #load region TRANSPORT
-            transport = RegionCrashedTransport()
-
-            transport.region = population.region
-            transport.year = year
-            transport.crashed_transport_number = 0
-
-            transport.save()
+            RegionCrashedTransport.objects.create(region=region,
+                                                  year=year,
+                                                  crashed_transport_number=0)
 
 
 #WARNING DONT START IF NOT SURE TOOOOO MUCH TIME WORKS
 #method that load all data from downloaded .xls to database (CURRENT DATA DROPS!!!!)
 def update_db():
-
     #drop current base
     drop_db()
 
+    print " ===================================Finland==================================================="
+    finland_stats.add_stats()
 
     #create region structure in the base
     load_regions_db()
 
     #load from xls to base
-    for year in range(from_year, to_year):
+    for year in range(from_year, to_year + 1):
 
         file_name = "tables/" + str(year) + ".xls"
 

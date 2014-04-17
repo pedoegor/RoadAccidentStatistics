@@ -1,9 +1,11 @@
+# -*- coding: utf-8 -*-
 __author__ = 'viosng'
 from RoadAccidentStatistics.views import *
 
 
 def add_stats():
-    region = get_region_by_name('Финляндия')
+    region = Region(name=u'Финляндия', parent=None)
+    region.save()
     data = [[2004,  375,    8791],
             [2005,	379,	8983],
             [2006,	336,	8580],
@@ -14,8 +16,7 @@ def add_stats():
             [2011,	292,	7931],
             [2012,	255,	7088]]
     for d in data:
-        stat = RegionStat(region=region, year=d[0], accident_type='all', dead_number=d[1], injured_number=d[2], accident_number=0)
-        stat.save()
+        RegionStat.objects.create(region=region, year=d[0], accident_type='all', dead_number=d[1], injured_number=d[2], accident_number=0)
 
     population = [[2004,	5228000],
                     [2005,	5246000],
@@ -29,5 +30,4 @@ def add_stats():
                     [2013,	5450000]]
 
     for d in population:
-        stat = RegionPopulation(region=region, year=d[0], population=d[1])
-        stat.save()
+        RegionPopulation.objects.create(region=region, year=d[0], population=d[1])

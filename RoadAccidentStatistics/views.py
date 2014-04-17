@@ -13,6 +13,8 @@ def list_to_str(array):
 
 
 def get_region_by_name(name):
+    if name is None:
+        return None
     return Region.objects.filter(name=name)[0]
 
 
@@ -28,7 +30,6 @@ def get_region_list_for_select(finland_comp=False):
 
 
 def dashboard(request):
-    print len(RegionStat.objects.all())
     return render_to_response('dashboard.html', {'type': 'dashboard', 'title': u'Статистика ДТП'})
 
 
@@ -68,12 +69,16 @@ def bubble_chart_data(request, regions, from_year, to_year):
     for region_name in regions:
         region = get_region_by_name(region_name)
         for year in range(from_year, to_year + 1):
-            population = RegionPopulation.objects.filter(region=region, year=year)[0].population
-            crashed_number = RegionCrashedTransport.objects.filter(region=region, year=year)[0].crashed_transport_number
-            hurt_number = RegionStat.objects.filter(region=region, year=year, accident_type='all')[0].get_stat_number(
-                'hurt')
-            data.append([region.name, crashed_number / (population / 10), hurt_number / (population / 100),
-                         str(year), population])
+            try:
+                population = RegionPopulation.objects.filter(region=region, year=year)[0].population
+                crashed_number = RegionCrashedTransport.objects.filter(region=region, year=year)[0].crashed_transport_number
+                region_stat = RegionStat.objects.filter(region=region, year=year, accident_type='all')[0]
+                data.append([region.name,
+                             region_stat.accident_number / (crashed_number / 10000),
+                             region_stat.get_stat_number('hurt') / (population / 100000),
+                             str(year), population])
+            except ArithmeticError:
+                pass
     return HttpResponse(json.dumps({"chart_title": chart_title,
                                     "xAxis_title": xAxis,
                                     "yAxis_title": yAxis,
@@ -149,17 +154,19 @@ def trend_chart_data(request, regions, from_year, to_year, chart_type, trend_typ
     if scale_type == 'no':
         scale_function = lambda r, y: 1
     elif scale_type == 'population':
-        scale_function = lambda r, y: RegionPopulation.objects.filter(region=r, year=y)[0].population / 100
+        scale_function = lambda r, y: RegionPopulation.objects.filter(region=r, year=y)[0].population / 100000
     else:
-        scale_function = lambda r, y: RegionCrashedTransport.objects.filter(region=r, year=y)[
-                                          0].crashed_transport_number / 10
+        scale_function = lambda r, y: RegionCrashedTransport.objects.filter(region=r, year=y)[0].crashed_transport_number / 10000
     for region_name in regions:
+
         region = get_region_by_name(region_name)
         region_stat_data = stat_data.filter(region=region)
         for i in range(to_year + 1 - from_year):
-            data[i + 1].append(
-                region_stat_data.filter(year=from_year + i)[0].get_stat_number(stat_type) / scale_function(region,
-                                                                                                           year))
+            try:
+                data[i + 1].append(
+                    region_stat_data.filter(year=from_year + i)[0].get_stat_number(stat_type) / scale_function(region, from_year + i))
+            except ArithmeticError:
+                pass
 
     return HttpResponse(json.dumps({"chart_title": chart_title,
                                     "xAxis_title": xAxis,
@@ -299,7 +306,7 @@ def sankey_chart_data(request, regions, stat_type, from_year, to_year):
 
 def finland_comp(request):
     min_year = RegionStat.objects.earliest("year").year
-    max_year = RegionStat.objects.latest("year").year
+    max_year = 2012
 
     return render_to_response('finland_comp_with_form.html', {"type": "finland_comp",
                                                              "title": u'Статистика ДТП',
@@ -364,17 +371,20 @@ def finland_comp_data(request, regions, from_year, to_year, chart_type, trend_ty
     if scale_type == 'no':
         scale_function = lambda r, y: 1
     elif scale_type == 'population':
-        scale_function = lambda r, y: RegionPopulation.objects.filter(region=r, year=y)[0].population / 100
+        scale_function = lambda r, y: RegionPopulation.objects.filter(region=r, year=y)[0].population / 100000
     else:
-        scale_function = lambda r, y: RegionCrashedTransport.objects.filter(region=r, year=y)[0].crashed_transport_number / 10
+        scale_function = lambda r, y: RegionCrashedTransport.objects.filter(region=r, year=y)[0].crashed_transport_number / 10000
     for region_name in regions:
         print region_name
         region = get_region_by_name(region_name)
         region_stat_data = stat_data.filter(region=region)
         for i in range(to_year + 1 - from_year):
-            data[i + 1].append(
-                region_stat_data.filter(year=from_year + i)[0].get_stat_number(stat_type) / scale_function(
-                    region, from_year + i))
+            try:
+                data[i + 1].append(
+                    region_stat_data.filter(year=from_year + i)[0].get_stat_number(stat_type) / scale_function(
+                        region, from_year + i))
+            except ArithmeticError:
+                pass
 
     return HttpResponse(json.dumps({"chart_title": chart_title,
                                     "xAxis_title": xAxis,
