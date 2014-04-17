@@ -344,7 +344,7 @@ def finland_comp_url(request, regions, from_year, to_year, chart_type, trend_typ
                   (u'Масштаб', scale_name),)
     return render_to_response('finland_comp_by_url.html', {"type": "finland_comp",
                                                           "title": u'Статистика ДТП',
-                                                          "chart_title": u'График статистики ДТП с трендом',
+                                                          "chart_title": u'Сравнение со статистикой ДТП в Финляндии',
                                                           "parameters_title": u'Параметры',
                                                           "info_header": u'Информация',
                                                           "parameters": parameters,
