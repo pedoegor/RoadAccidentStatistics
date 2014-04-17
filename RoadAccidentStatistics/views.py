@@ -66,20 +66,20 @@ def bubble_chart_data(request, regions, from_year, to_year):
     yAxis = u'Число пострадавших на 100 тыс. жителей'
     chart_title = u'Количество ДТП, число пострадавших и численность населения регионов с %s по %s года' % (from_year,
                                                                                                             to_year,)
+
     data = [[u'Регион', xAxis, yAxis, u'Год', u'Численность населения']]
     for region_name in regions:
         region = get_region_by_name(region_name)
         for year in range(from_year, to_year + 1):
-            try:
-                population = RegionPopulation.objects.filter(region=region, year=year)[0].population
-                crashed_number = RegionCrashedTransport.objects.filter(region=region, year=year)[0].crashed_transport_number
-                region_stat = RegionStat.objects.filter(region=region, year=year, accident_type='all')[0]
-                data.append([region.name,
-                             region_stat.accident_number / (crashed_number / 10000),
-                             region_stat.get_stat_number('hurt') / (population / 100000),
-                             str(year), population])
-            except ArithmeticError:
-                pass
+            population = RegionPopulation.objects.filter(region=region, year=year)[0].population
+            crashed_number = RegionCrashedTransport.objects.filter(region=region, year=year)[0].crashed_transport_number
+            region_stat = RegionStat.objects.filter(region=region, year=year, accident_type='all')[0]
+            scaled_p = region_stat.get_stat_number('hurt') / (population / 100000) if population > 100000 else 0
+            scaled_t = region_stat.accident_number / (crashed_number / 10000) if crashed_number > 10000 else 0
+            data.append([region.name,
+                         scaled_t,
+                         scaled_p,
+                         str(year), population])
     return HttpResponse(json.dumps({"chart_title": chart_title,
                                     "xAxis_title": xAxis,
                                     "yAxis_title": yAxis,
@@ -159,8 +159,8 @@ def trend_chart_data(request, regions, from_year, to_year, chart_type, trend_typ
         scale_function = lambda r, y: RegionPopulation.objects.filter(region=r, year=y)[0].population / 100000
     else:
         scale_function = lambda r, y: RegionCrashedTransport.objects.filter(region=r, year=y)[0].crashed_transport_number / 10000
-    for region_name in regions:
 
+    for region_name in regions:
         region = get_region_by_name(region_name)
         region_stat_data = stat_data.filter(region=region)
         for i in range(to_year + 1 - from_year):
@@ -168,8 +168,7 @@ def trend_chart_data(request, regions, from_year, to_year, chart_type, trend_typ
                 data[i + 1].append(
                     region_stat_data.filter(year=from_year + i)[0].get_stat_number(stat_type) / scale_function(region, from_year + i))
             except ArithmeticError:
-                pass
-
+                data[i + 1].append(0)
     return HttpResponse(json.dumps({"chart_title": chart_title,
                                     "xAxis_title": xAxis,
                                     "yAxis_title": yAxis,
@@ -379,8 +378,8 @@ def finland_comp_data(request, regions, from_year, to_year, chart_type, trend_ty
         scale_function = lambda r, y: RegionPopulation.objects.filter(region=r, year=y)[0].population / 100000
     else:
         scale_function = lambda r, y: RegionCrashedTransport.objects.filter(region=r, year=y)[0].crashed_transport_number / 10000
+
     for region_name in regions:
-        print region_name
         region = get_region_by_name(region_name)
         region_stat_data = stat_data.filter(region=region)
         for i in range(to_year + 1 - from_year):
@@ -389,8 +388,7 @@ def finland_comp_data(request, regions, from_year, to_year, chart_type, trend_ty
                     region_stat_data.filter(year=from_year + i)[0].get_stat_number(stat_type) / scale_function(
                         region, from_year + i))
             except ArithmeticError:
-                pass
-
+                data[i + 1].append(0)
     return HttpResponse(json.dumps({"chart_title": chart_title,
                                     "xAxis_title": xAxis,
                                     "yAxis_title": yAxis,
