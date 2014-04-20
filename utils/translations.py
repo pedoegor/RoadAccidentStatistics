@@ -20,8 +20,12 @@ international = {
                          'en' : u'Parameters'},
     'information_header': {'ru' : u'Информация',
                            'en' : u'Information'},
+    'year_title': {'ru' : u'Год',
+                   'en' : u'Year'},
+    'population_title': {'ru' : u'Численность населения',
+                         'en': u'Population'},
 
-    'bubble_chart_title': {'ru' : u'Пузырьковая диаграмма относительной стиатистики ДТП',
+    'bubble_chart_title': {'ru' : u'Пузырьковая диаграмма относительной статистики ДТП',
                            'en' : u'Bubble chart or relative road accident statistics'},
     'bubble_chart_xAxis': {'ru' : u'Количество ДТП на 10 тыс. ед. ТС',
                            'en' : u'Road accidents per 10 thousand units of vehicles'},
@@ -37,8 +41,7 @@ international = {
 
 
     
-    'year_title': {'ru' : u'Год', 'en' : u'Year'},
-    'population_title': {'ru' : u'Численность населения', 'en': u'Population'},
+
     'graph_type_title': {'ru' : u'Тип графика', 'en': u'Type of graph'},
     'trend_line_title': {'ru' : u'Линия тренда', 'en': u'Trend line'},
     'reason_title': {'ru' : u'Причина ДТП', 'en': u'The reason for road accident'},

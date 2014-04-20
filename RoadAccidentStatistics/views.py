@@ -49,6 +49,7 @@ def bubble_chart(request, lang):
     return render_to_response('bubble_chart_with_form.html', {"type": "bubble_chart",
                                                               "title": international['title'][lang],
                                                               "chart_title": international['bubble_chart_title'][lang],
+                                                              'lang': lang,
                                                               "parameters_title": international['parameters_title'][lang],
                                                               "info_header": international['information_header'][lang],
                                                               "regions": get_region_list_for_select(),
@@ -64,6 +65,7 @@ def bubble_chart_url(request, lang, regions, from_year, to_year):
     return render_to_response('bubble_chart_by_url.html', {"type": "bubble_chart",
                                                            "title": international['title'][lang],
                                                            "chart_title": international['bubble_chart_title'][lang],
+                                                           'lang': lang,
                                                            "parameters_title":international['parameters_title'][lang],
                                                            "info_header": international['information_header'][lang],
                                                            "parameters": parameters,
@@ -74,11 +76,11 @@ def bubble_chart_data(request, lang, regions, from_year, to_year):
     regions = regions.split(",")
     from_year = int(from_year)
     to_year = int(to_year)
-    xAxis = international['bubble_xAxis'][lang]
-    yAxis = international['bubble_yAxis'][lang]
-    chart_title = international['bubble_chart_title_param'][lang] % (from_year,  to_year,)
+    xAxis = international['bubble_chart_xAxis'][lang]
+    yAxis = international['bubble_chart_yAxis'][lang]
+    chart_title = international['bubble_chart_header'][lang] % (from_year,  to_year,)
 
-    data = [[international['regions_title'][lang], xAxis, yAxis, international['year_title'][lang], international['population_title']]]
+    data = [[international['regions_title'][lang], xAxis, yAxis, international['year_title'][lang], international['population_title'][lang]]]
     for region_name in regions:
         region = get_region_by_name(region_name)
         for year in range(from_year, to_year + 1):

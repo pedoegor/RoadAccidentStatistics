@@ -51,7 +51,7 @@ chartObjectMap["bar"] = function(chartDiv, title, hAxisTitle, vAxisTitle, minH, 
 chartObjectMap["bubble"] = function(chartDiv, title, hAxisTitle, vAxisTitle, minH, minV, maxH, maxV) {
     return {
         object: new google.visualization.BubbleChart(document.getElementById(chartDiv)),
-        options: getOptions(title, vAxisTitle, hAxisTitle, minH, minV, maxH, maxV)
+        options: getOptions(title, hAxisTitle, vAxisTitle, minH, minV, maxH, maxV)
     };
 };
 chartObjectMap["sankey"] = function(chartDiv) {

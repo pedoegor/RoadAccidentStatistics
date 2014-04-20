@@ -1,4 +1,8 @@
-<!DOCTYPE html>
+<script type="text/javascript">
+    function changeLang(from, to) {
+        window.location.href = document.URL.replace('{{ type }}/' + from, '{{ type }}/' + to);
+    }
+</script>
 <nav class="navbar navbar-default" role="navigation">
   <div class="container-fluid">
     <div class="navbar-header">
@@ -8,48 +12,48 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="/dashboard">{{ title }}</a>
+      <a class="navbar-brand" href="/dashboard/{{ lang }}">{{ title }}</a>
     </div>
 
     {% if lang == 'ru' %}
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-            <li{% if type == "dashboard" %} class="active"{% endif %}><a href="/dashboard">Главная</a></li>
+            <li{% if type == "dashboard" %} class="active"{% endif %}><a href="/dashboard/{{ lang }}">Главная</a></li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Анализ<b class="caret"></b></a>
               <ul class="dropdown-menu">
-                <li{% if type == "bubble_chart" %} class="active"{% endif %}><a href="/bubble_chart">Пузырьковая диаграмма относительной стиатистики ДТП</a></li>
-                <li{% if type == "trend_chart" %} class="active"{% endif %}><a href="/trend_chart">График статистики ДТП с трендом</a></li>
-                <li{% if type == "pie_chart" %} class="active"{% endif %}><a href="/pie_chart">Круговая диаграмма причин ДТП</a></li>
-                <li{% if type == "sankey_chart" %} class="active"{% endif %}><a href="/sankey_chart">Потоковая диаграмма</a></li>
-                <li{% if type == "finland_comp" %} class="active"{% endif %}><a href="/finland_comp">Сравнение со статистикой ДТП Финляндии</a></li>
+                <li{% if type == "bubble_chart" %} class="active"{% endif %}><a href="/bubble_chart/ru">Пузырьковая диаграмма относительной стиатистики ДТП</a></li>
+                <li{% if type == "trend_chart" %} class="active"{% endif %}><a href="/trend_chart/ru">График статистики ДТП с трендом</a></li>
+                <li{% if type == "pie_chart" %} class="active"{% endif %}><a href="/pie_chart/ru">Круговая диаграмма причин ДТП</a></li>
+                <li{% if type == "sankey_chart" %} class="active"{% endif %}><a href="/sankey_chart/ru">Потоковая диаграмма</a></li>
+                <li{% if type == "finland_comp" %} class="active"{% endif %}><a href="/finland_comp/ru">Сравнение со статистикой ДТП Финляндии</a></li>
               </ul>
             </li>
             <li><a href="/admin">Интерфейс администратора</a></li>
           </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="/{{ type }}/en/">English version</a></li>
+                <li><a class="btn" onclick="changeLang('ru', 'en')">English version</a></li>
             </ul>
         </div>
     {% endif %}
   {% if lang == 'en' %}
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
-        <li{% if type == "dashboard" %} class="active"{% endif %}><a href="/dashboard">Home page</a></li>
+        <li{% if type == "dashboard" %} class="active"{% endif %}><a href="/dashboard/{{ lang }}">Home page</a></li>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">Analysis<b class="caret"></b></a>
           <ul class="dropdown-menu">
-            <li{% if type == "bubble_chart" %} class="active"{% endif %}><a href="/bubble_chart">Bubble chart or relative road accident statistics</a></li>
-            <li{% if type == "trend_chart" %} class="active"{% endif %}><a href="/trend_chart">Graph of road accidents statistics with a trend line</a></li>
-            <li{% if type == "pie_chart" %} class="active"{% endif %}><a href="/pie_chart">Pie chart of road accident reasons</a></li>
-            <li{% if type == "sankey_chart" %} class="active"{% endif %}><a href="/sankey_chart">Sankey chart of road accident reasons</a></li>
-            <li{% if type == "finland_comp" %} class="active"{% endif %}><a href="/finland_comp">Comparison of road accident statistics of the Russian Federation and Finland</a></li>
+            <li{% if type == "bubble_chart" %} class="active"{% endif %}><a href="/bubble_chart/en">Bubble chart or relative road accident statistics</a></li>
+            <li{% if type == "trend_chart" %} class="active"{% endif %}><a href="/trend_chart/en">Graph of road accidents statistics with a trend line</a></li>
+            <li{% if type == "pie_chart" %} class="active"{% endif %}><a href="/pie_chart/en">Pie chart of road accident reasons</a></li>
+            <li{% if type == "sankey_chart" %} class="active"{% endif %}><a href="/sankey_chart/en">Sankey chart of road accident reasons</a></li>
+            <li{% if type == "finland_comp" %} class="active"{% endif %}><a href="/finland_comp/en">Comparison of road accident statistics of the Russian Federation and Finland</a></li>
           </ul>
         </li>
         <li><a href="/admin">Admin interface</a></li>
       </ul>
           <ul class="nav navbar-nav navbar-right">
-              <li><a href="/{{ type }}/ru/">Русская версия</a></li>
+              <li><a class="btn" onclick="changeLang('en', 'ru')">Русская версия</a></li>
           </ul>
       </div>
   {% endif %}
