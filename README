@@ -3,3 +3,11 @@ Service with road accident statistics from Russia and Finland
 Admin account:
 login: admin
 password: changeme
+
+Road accident expert account:
+login: road_accident_expert
+password: road
+
+Population expert account:
+login: population_expert
+password: population

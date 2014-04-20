@@ -189,8 +189,9 @@ def update_db():
     #drop current base
     drop_db()
 
-    print " ===================================Finland==================================================="
+    print " ===================================Finland Stats==================================================="
     finland_stats.add_stats()
+    print " ===================================Finland Stats: OK==============================================="
 
     #create region structure in the base
     load_regions_db()
