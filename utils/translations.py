@@ -34,24 +34,28 @@ international = {
     'bubble_chart_header': {'ru' : u'Количество ДТП, число пострадавших и численность населения регионов с %s по %s года',
                                  'en' : u'The number of road accidents, number of injured and the population of regions from %s to %s years'},
 
+    'graph_type_title': {'ru' : u'Тип графика', 'en': u'Graph type'},
+    'trend_line_title': {'ru' : u'Линия тренда', 'en': u'Trend line'},
+    'injured_title': {'ru' : u'Число пострадавших', 'en': u'The number of injured'},
 
     'trend_chart_title': {'ru' : u'График статистики ДТП с трендом', 'en' : u'Graph statistics of road accidents with the trend line'},
+    'trend_reason_title': {'ru': u'%s %s по причине \"%s\" с %s по %s года', 'en': u'%s %s because of  \"%s\" from %s to %s years'},
+
+    'diff_fin_rus_title': {'ru' : u'Сравнение статистики ДТП в Российской Федерации и Финляндии', 'en': u'Comparison of road accident statistics of the Russian Federation and Finland'},
+
     'pie_chart_title': {'ru' : u'Круговая диаграмма причин ДТП', 'en' : u'Pie chart reasons of road accidents'},
     'sankey_chart_title': {'ru' : u'Потоковая диаграмма причин ДТП', 'en' : u'Sankey chart of reasons of road accidents'},
 
 
-    
 
-    'graph_type_title': {'ru' : u'Тип графика', 'en': u'Type of graph'},
-    'trend_line_title': {'ru' : u'Линия тренда', 'en': u'Trend line'},
     'reason_title': {'ru' : u'Причина ДТП', 'en': u'The reason for road accident'},
     'observed_title': {'ru' :u'Наблюдаемая величина', 'en': u'Observed value'},
-    'trend_reason_title': {'ru': u'%s %s по причине \"%s\" с %s по %s года', 'en': u'%s %s because of  \"%s\" from %s to %s years'},
+
     'pie_chart_title_param' :  {'ru' : u'Процентное соотношение числа пострадавших по причинам ДТП с %s по %s года', 'en': u'Percentage ratio of the number of injured for reasons of road accidents from %s to %s years'},
-    'injured_title': {'ru' : u'Число пострадавших', 'en': u'The number of injured'},
+
     'sankey_title_param':  {'ru' : u'Потоковая диаграмма причин ДТП пропорционально их количеству с %s по %s года', 'en': u'Sankey chart of reasons of road accidents in proportion to their number from %s to %s years'},
     'driver_pedestrian_title': {'ru' : u'ДТП по вине водителей и пешеходов', 'en': u'Road accidents caused by drivers and pedestrians'},
-    'diff_fin_rus_title': {'ru' : u'Сравнение со статистикой ДТП в Финляндии', 'en': u'Comparison of road accident statistics in Finland'},
+
     'scale_title': {'ru' : u'Масштаб', 'en': u'Scale'},
     'diff_fin_param_title': {'ru' : u'%s %s с %s по %s года', 'en': u'%s %s from %s to %s years'},
 

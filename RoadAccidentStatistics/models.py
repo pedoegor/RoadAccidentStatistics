@@ -15,7 +15,7 @@ class Region(models.Model):
 class RegionStat(models.Model):
     region = models.ForeignKey(Region)
     year = models.IntegerField()
-    accident_type = models.CharField(max_length=10, choices=accident_types)
+    accident_type = models.CharField(max_length=10, choices=accident_types_models)
     dead_number = models.IntegerField()
     injured_number = models.IntegerField()
     accident_number = models.IntegerField()

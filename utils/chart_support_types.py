@@ -24,7 +24,7 @@ reasons = {
 }
 
 
-accident_types = (
+accident_types_models = (
     ('driver', u'Нарушение ПДД водителями ТС',),
     ('drunk', u'Нарушение ПДД водителями ТС в состоянии алкогольного опьянения',),
     ('juridical', u'Нарушение ПДД водителями ТС юридических лиц',),
@@ -36,33 +36,44 @@ accident_types = (
     ('all', u'Общее количество ДТП'),
 )
 
+accident_types = (
+    ('driver', u'Нарушение ПДД водителями ТС', u'Violation of traffic rules by vehicle drivers',),
+    ('drunk', u'Нарушение ПДД водителями ТС в состоянии алкогольного опьянения', u'Violation of traffic rules by vehicle drivers while intoxicated',),
+    ('juridical', u'Нарушение ПДД водителями ТС юридических лиц', u'Violation of traffic rules by entity vehicle drivers',),
+    ('physical', u'Нарушение ПДД водителями ТС физических лиц', u'Violation of traffic rules by individual vehicle drivers',),
+    ('pedestrian', u'Нарушение ПДД пешеходами', u'Violation of traffic rules by pedestrians',),
+    ('broken', u'ДТП из-за эксплуатации технически неисправных ТС', u'Accidents due to exploitation of technically faulty vehicles',),
+    ('roads', u'ДТП из-за неудовлетворительного состояния улиц и дорог', u'Accidents due to the poor state of roads and streets',),
+    ('hidden', u'ДТП с участием неустановленных транспортных средств', u'Accidents involving unidentified vehicles',),
+    ('all', u'Общее количество ДТП', u'Total number of road accidents',),
+)
+
 stat_types = (
-    ('hurt', u'Число пострадавших', True),
-    ('dead', u'Число погибших', True),
-    ('injured', u'Число раненых', True),
-    ('accident', u'Число ДТП', False),
+    ('hurt', u'Число пострадавших', u'The number of victims', True),
+    ('dead', u'Число погибших', u'The death toll', True),
+    ('injured', u'Число раненых', u'The number of wounded', True),
+    ('accident', u'Число ДТП', u'The number of road accidents', False),
 )
 
 scale_types = (
-    ('no', u'без масштаба', True),
-    ('population', u'на 100 тыс. жителей', True),
-    ('transport', u'на 10 тыс. транспортных средств', False),
+    ('no', u'без масштаба', u'No', True),
+    ('population', u'на 100 тыс. жителей', u'per 100,000 inhabitants', True),
+    ('transport', u'на 10 тыс. транспортных средств', u'per 10,000 units of vehicles', False),
 )
 
 chart_types = (
-    ('column', u'Вертикальная гистограмма'),
-    ('bar', u'Горизонтальная гистограмма'),
-    ('area', u'Диаграмма с областями'),
-    ('line', u'Линейный график'),
-    ('point', u'Точечный график'),
+    ('column', u'Вертикальная гистограмма', u'Bar chart',),
+    ('bar', u'Горизонтальная гистограмма', u'Column chart',),
+    ('area', u'Диаграмма с областями', u'Area chart',),
+    ('line', u'Линейный график', u'Line chart',),
+    ('point', u'Точечный график', u'Scatter chart',),
 )
 
 trend_types = (
-    ('no', u'Нет'),
-    ('linear', u'Линейная'),
-    ('exponential', u'Экспоненциальная'),
+    ('no', u'Нет', u'No',),
+    ('linear', u'Линейная', u'Linear',),
+    ('exponential', u'Экспоненциальная', u'Exponential',),
 )
-
 
 #sorted regions list in base loading order
 regions = (
@@ -292,37 +303,40 @@ parents = {
 }
 
 
-def get_name(searched_type, types, only_finland_comp=False):
+def get_name(searched_type, types, lang, only_finland_comp=False):
     for cur in types:
         if cur[0] == searched_type:
-            if only_finland_comp and not cur[2]:
+            if only_finland_comp and not cur[3]:
                 return None
-            return cur[1]
+            if lang == 'ru':
+                return cur[1]
+            return cur[2]
     return None
 
 
-def get_accident_name_by_type(searched_accident_type, only_finland_comp=False):
-    return get_name(searched_accident_type, accident_types, only_finland_comp)
+def get_accident_name_by_type(searched_accident_type, lang, only_finland_comp=False):
+    return get_name(searched_accident_type, accident_types, lang, only_finland_comp)
 
 
-def get_chart_name_by_type(searched_chart_type, only_finland_comp=False):
-    return get_name(searched_chart_type, chart_types, only_finland_comp)
+def get_chart_name_by_type(searched_chart_type, lang, only_finland_comp=False):
+    return get_name(searched_chart_type, chart_types, lang, only_finland_comp)
 
 
-def get_stat_name_by_type(searched_stat_type, only_finland_comp=False):
-    return get_name(searched_stat_type, stat_types, only_finland_comp)
+def get_stat_name_by_type(searched_stat_type, lang, only_finland_comp=False):
+    return get_name(searched_stat_type, stat_types, lang, only_finland_comp)
 
 
-def get_trend_name_by_type(searched_trend_type):
-    return get_name(searched_trend_type, trend_types)
+def get_trend_name_by_type(searched_trend_type, lang):
+    return get_name(searched_trend_type, trend_types, lang)
 
 
-def get_scale_name_by_type(searched_scale_type, only_finland_comp=False):
-    return get_name(searched_scale_type, scale_types, only_finland_comp)
+def get_scale_name_by_type(searched_scale_type, lang, only_finland_comp=False):
+    return get_name(searched_scale_type, scale_types, lang, only_finland_comp)
+
 
 def get_finland_types(types):
     new_types = []
     for t in types:
-        if t[2]:
+        if t[3]:
             new_types.append(t)
     return new_types

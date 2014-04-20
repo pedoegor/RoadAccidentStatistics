@@ -25,9 +25,9 @@ urlpatterns = patterns('',
     url(r'^sankey_chart/regions/([\w ,-\\.]+)/stat_type/(\w+)/from_year/(\d{4})/to_year/(\d{4})', sankey_chart_url),
     url(r'^sankey_chart/', sankey_chart),
 
-    url(r'^finland_comp/regions/([\w ,-\\.]+)/from_year/(\d{4})/to_year/(\d{4})/chart_type/(\w+)/trend_type/(\w+)/stat_type/(\w+)/scale_type/(\w+)/data', finland_comp_data),
-    url(r'^finland_comp/regions/([\w ,-\\.]+)/from_year/(\d{4})/to_year/(\d{4})/chart_type/(\w+)/trend_type/(\w+)/stat_type/(\w+)/scale_type/(\w+)', finland_comp_url),
-    url(r'^finland_comp/', finland_comp),
+    url(r'^finland_comp/(\w{2})/regions/([\w ,-\\.]+)/from_year/(\d{4})/to_year/(\d{4})/chart_type/(\w+)/trend_type/(\w+)/stat_type/(\w+)/scale_type/(\w+)/data', finland_comp_data),
+    url(r'^finland_comp/(\w{2})/regions/([\w ,-\\.]+)/from_year/(\d{4})/to_year/(\d{4})/chart_type/(\w+)/trend_type/(\w+)/stat_type/(\w+)/scale_type/(\w+)', finland_comp_url),
+    url(r'^finland_comp/(\w{2})/', finland_comp),
 
 )
 urlpatterns += staticfiles_urlpatterns()

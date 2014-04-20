@@ -99,12 +99,13 @@ def bubble_chart_data(request, lang, regions, from_year, to_year):
                                     "chart_data": data}), content_type="application/json")
 
 
-def trend_chart(request):
+def trend_chart(request, lang):
     min_year = RegionStat.objects.earliest("year").year
     max_year = RegionStat.objects.latest("year").year
     return render_to_response('trend_chart_with_form.html', {"type": "trend_chart",
                                                              "title": international['title'][lang],
                                                              "chart_title": international['trend_chart_title'][lang],
+                                                             'lang': lang,
                                                              "parameters_title": international['parameters_title'][lang],
                                                              "info_header": international['information_header'][lang],
                                                              "regions": get_region_list_for_select(),
@@ -117,42 +118,48 @@ def trend_chart(request):
                                                              "scale_types": scale_types})
 
 
-def trend_chart_url(request, regions, from_year, to_year, chart_type, trend_type, accident_type, stat_type, scale_type):
+def trend_chart_url(request, lang, regions, from_year, to_year, chart_type, trend_type, accident_type, stat_type, scale_type):
     regions = regions.split(",")
     from_year = int(from_year)
     to_year = int(to_year)
-    accident_name = get_accident_name_by_type(accident_type)
-    stat_name = get_stat_name_by_type(stat_type)
-    chart_name = get_chart_name_by_type(chart_type)
-    trend_name = get_trend_name_by_type(trend_type)
-    scale_name = get_scale_name_by_type(scale_type)
+    accident_name = get_accident_name_by_type(accident_type, lang)
+    stat_name = get_stat_name_by_type(stat_type, lang)
+    chart_name = get_chart_name_by_type(chart_type, lang)
+    trend_name = get_trend_name_by_type(trend_type, lang)
+    scale_name = get_scale_name_by_type(scale_type, lang)
 
     if from_year > to_year or accident_name is None or stat_name is None or chart_name is None or trend_name is None \
             or scale_name is None:
         return bad_request(request)
 
-    parameters = ((international['regions_title'][lang], list_to_str(regions)), (international['from_title'][lang], from_year), (international['to_title'][lang], to_year), (international['graph_type_title'][lang], chart_name),
-                  (international['trend_line_title'][lang], trend_name), (international['reason_title'][lang], accident_name), (international['observed_title'][lang], stat_name),
+    parameters = ((international['regions_title'][lang], list_to_str(regions)),
+                  (international['from_title'][lang], from_year),
+                  (international['to_title'][lang], to_year),
+                  (international['graph_type_title'][lang], chart_name),
+                  (international['trend_line_title'][lang], trend_name),
+                  (international['reason_title'][lang], accident_name),
+                  (international['observed_title'][lang], stat_name),
                   (international['scale_title'][lang], scale_name),)
     return render_to_response('trend_chart_by_url.html', {"type": "trend_chart",
                                                           "title": international['title'][lang],
                                                           "chart_title": international['trend_chart_title'][lang],
+                                                          'lang': lang,
                                                           "parameters_title": international['parameters_title'][lang],
                                                           "info_header": international['information_header'][lang],
                                                           "parameters": parameters,
                                                           "url": request.path})
 
 
-def trend_chart_data(request, regions, from_year, to_year, chart_type, trend_type, accident_type, stat_type,
+def trend_chart_data(request, lang, regions, from_year, to_year, chart_type, trend_type, accident_type, stat_type,
                      scale_type):
     regions = regions.split(",")
     from_year = int(from_year)
     to_year = int(to_year)
-    accident_name = get_accident_name_by_type(accident_type)
-    stat_name = get_stat_name_by_type(stat_type)
-    chart_name = get_chart_name_by_type(chart_type)
-    trend_name = get_trend_name_by_type(trend_type)
-    scale_name = get_scale_name_by_type(scale_type)
+    accident_name = get_accident_name_by_type(accident_type, lang)
+    stat_name = get_stat_name_by_type(stat_type, lang)
+    chart_name = get_chart_name_by_type(chart_type, lang)
+    trend_name = get_trend_name_by_type(trend_type, lang)
+    scale_name = get_scale_name_by_type(scale_type, lang)
 
     if from_year > to_year or accident_name is None or stat_name is None or chart_name is None or trend_name is None \
             or scale_name is None:
@@ -270,7 +277,7 @@ def sankey_chart_url(request, regions, stat_type, from_year, to_year):
                                                            "url": request.path})
 
 
-def sankey_chart_data(request, regions, stat_type, from_year, to_year):
+def sankey_chart_data(request, lang, regions, stat_type, from_year, to_year):
     regions = regions.split(",")
     from_year = int(from_year)
     to_year = int(to_year)
@@ -320,7 +327,7 @@ def sankey_chart_data(request, regions, stat_type, from_year, to_year):
     return HttpResponse(json.dumps({"chart_title": chart_title, "chart_data": data}), content_type="application/json")
 
 
-def finland_comp(request):
+def finland_comp(request, lang):
     min_year = RegionStat.objects.earliest("year").year
     max_year = 2012
 
@@ -338,15 +345,15 @@ def finland_comp(request):
                                                               "scale_types": get_finland_types(scale_types)})
 
 
-def finland_comp_url(request, regions, from_year, to_year, chart_type, trend_type, stat_type, scale_type):
+def finland_comp_url(request, regions, lang, from_year, to_year, chart_type, trend_type, stat_type, scale_type):
     regions = regions.split(",")
     from_year = int(from_year)
     to_year = int(to_year)
-    accident_name = get_accident_name_by_type('all')
-    stat_name = get_stat_name_by_type(stat_type, True)
-    chart_name = get_chart_name_by_type(chart_type)
-    trend_name = get_trend_name_by_type(trend_type)
-    scale_name = get_scale_name_by_type(scale_type, True)
+    accident_name = get_accident_name_by_type('all', lang)
+    stat_name = get_stat_name_by_type(stat_type, lang, True)
+    chart_name = get_chart_name_by_type(chart_type, lang)
+    trend_name = get_trend_name_by_type(trend_type, lang)
+    scale_name = get_scale_name_by_type(scale_type, lang, True)
 
     if from_year > to_year or accident_name is None or stat_name is None or chart_name is None or trend_name is None \
             or scale_name is None:
@@ -364,15 +371,15 @@ def finland_comp_url(request, regions, from_year, to_year, chart_type, trend_typ
                                                           "url": request.path})
 
 
-def finland_comp_data(request, regions, from_year, to_year, chart_type, trend_type, stat_type, scale_type):
+def finland_comp_data(request, lang, regions, from_year, to_year, chart_type, trend_type, stat_type, scale_type):
     regions = regions.split(",")
     from_year = int(from_year)
     to_year = int(to_year)
-    accident_name = get_accident_name_by_type('all')
-    stat_name = get_stat_name_by_type(stat_type, True)
-    chart_name = get_chart_name_by_type(chart_type)
-    trend_name = get_trend_name_by_type(trend_type)
-    scale_name = get_scale_name_by_type(scale_type, True)
+    accident_name = get_accident_name_by_type('all', lang)
+    stat_name = get_stat_name_by_type(stat_type, lang, True)
+    chart_name = get_chart_name_by_type(chart_type, lang)
+    trend_name = get_trend_name_by_type(trend_type, lang)
+    scale_name = get_scale_name_by_type(scale_type, lang, True)
 
     if from_year > to_year or accident_name is None or stat_name is None or chart_name is None or trend_name is None \
             or scale_name is None:
