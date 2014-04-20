@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+#current language option
+current_language = u'Ru'
 
 #only for .py  |||  .html are rewritten according to perfect translation
 international = {
