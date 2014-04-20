@@ -7,10 +7,11 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^dashboard/', dashboard),
-    url(r'^bubble_chart/regions/([\w ,-\\.]+)/from_year/(\d{4})/to_year/(\d{4})/data', bubble_chart_data),
-    url(r'^bubble_chart/regions/([\w ,-\\.]+)/from_year/(\d{4})/to_year/(\d{4})', bubble_chart_url),
-    url(r'^bubble_chart', bubble_chart),
+    url(r'^dashboard/(\w{2})', dashboard),
+    url(r'^dashboard/', dashboard_default),
+    url(r'^bubble_chart/(\w{2})/regions/([\w ,-\\.]+)/from_year/(\d{4})/to_year/(\d{4})/data', bubble_chart_data),
+    url(r'^bubble_chart/(\w{2})/regions/([\w ,-\\.]+)/from_year/(\d{4})/to_year/(\d{4})', bubble_chart_url),
+    url(r'^bubble_chart/(\w{2})/', bubble_chart),
 
     url(r'^trend_chart/regions/([\w ,-\\.]+)/from_year/(\d{4})/to_year/(\d{4})/chart_type/(\w+)/trend_type/(\w+)/accident_type/(\w+)/stat_type/(\w+)/scale_type/(\w+)/data', trend_chart_data),
     url(r'^trend_chart/regions/([\w ,-\\.]+)/from_year/(\d{4})/to_year/(\d{4})/chart_type/(\w+)/trend_type/(\w+)/accident_type/(\w+)/stat_type/(\w+)/scale_type/(\w+)', trend_chart_url),

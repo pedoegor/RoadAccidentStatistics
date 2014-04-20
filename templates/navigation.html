@@ -11,23 +11,47 @@
       <a class="navbar-brand" href="/dashboard">{{ title }}</a>
     </div>
 
-    <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav">
-        <li{% if type == "dashboard" %} class="active"{% endif %}><a href="/dashboard">Главная</a></li>
+    {% if lang == 'ru' %}
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+            <li{% if type == "dashboard" %} class="active"{% endif %}><a href="/dashboard">Главная</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Анализ<b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li{% if type == "bubble_chart" %} class="active"{% endif %}><a href="/bubble_chart">Пузырьковая диаграмма относительной стиатистики ДТП</a></li>
+                <li{% if type == "trend_chart" %} class="active"{% endif %}><a href="/trend_chart">График статистики ДТП с трендом</a></li>
+                <li{% if type == "pie_chart" %} class="active"{% endif %}><a href="/pie_chart">Круговая диаграмма причин ДТП</a></li>
+                <li{% if type == "sankey_chart" %} class="active"{% endif %}><a href="/sankey_chart">Потоковая диаграмма</a></li>
+                <li{% if type == "finland_comp" %} class="active"{% endif %}><a href="/finland_comp">Сравнение со статистикой ДТП Финляндии</a></li>
+              </ul>
+            </li>
+            <li><a href="/admin">Интерфейс администратора</a></li>
+          </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="/{{ type }}/en/">English version</a></li>
+            </ul>
+        </div>
+    {% endif %}
+  {% if lang == 'en' %}
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+        <li{% if type == "dashboard" %} class="active"{% endif %}><a href="/dashboard">Home page</a></li>
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Анализ<b class="caret"></b></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Analysis<b class="caret"></b></a>
           <ul class="dropdown-menu">
-            <li{% if type == "bubble_chart" %} class="active"{% endif %}><a href="/bubble_chart">Пузырьковая диаграмма</a></li>
-            <li{% if type == "trend_chart" %} class="active"{% endif %}><a href="/trend_chart">График статистики ДТП с трендом</a></li>
-            <li{% if type == "pie_chart" %} class="active"{% endif %}><a href="/pie_chart">Круговая диаграмма причин ДТП</a></li>
-            <li{% if type == "sankey_chart" %} class="active"{% endif %}><a href="/sankey_chart">Потоковая диаграмма</a></li>
-            <li{% if type == "finland_comp" %} class="active"{% endif %}><a href="/finland_comp">Сравнение со статистикой ДТП Финляндии</a></li>
+            <li{% if type == "bubble_chart" %} class="active"{% endif %}><a href="/bubble_chart">Bubble chart or relative road accident statistics</a></li>
+            <li{% if type == "trend_chart" %} class="active"{% endif %}><a href="/trend_chart">Graph of road accidents statistics with a trend line</a></li>
+            <li{% if type == "pie_chart" %} class="active"{% endif %}><a href="/pie_chart">Pie chart of road accident reasons</a></li>
+            <li{% if type == "sankey_chart" %} class="active"{% endif %}><a href="/sankey_chart">Sankey chart of road accident reasons</a></li>
+            <li{% if type == "finland_comp" %} class="active"{% endif %}><a href="/finland_comp">Comparison of road accident statistics of the Russian Federation and Finland</a></li>
           </ul>
         </li>
-        <li><a href="/admin">Интерфейс администратора</a></li>
+        <li><a href="/admin">Admin interface</a></li>
       </ul>
-
-    </div>
+          <ul class="nav navbar-nav navbar-right">
+              <li><a href="/{{ type }}/ru/">Русская версия</a></li>
+          </ul>
+      </div>
+  {% endif %}
   </div>
 </nav>

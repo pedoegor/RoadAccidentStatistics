@@ -30,44 +30,55 @@ def get_region_list_for_select(finland_comp=False):
     return regions
 
 
-def dashboard(request):
-    return render_to_response('dashboard.html', {'type': 'dashboard', 'title': international['title'][current_language]})
+def dashboard_default(request):
+    return dashboard(request, 'ru')
 
 
-def bubble_chart(request):
+def dashboard(request, lang):
+    print lang
+    if lang not in ['ru', 'en']:
+        return bad_request(request)
+    return render_to_response('dashboard.html', {'type': 'dashboard',
+                                                 'title': international['title'][lang],
+                                                 'lang': lang})
+
+
+def bubble_chart(request, lang):
     min_year = RegionStat.objects.earliest("year").year
     max_year = RegionStat.objects.latest("year").year
     return render_to_response('bubble_chart_with_form.html', {"type": "bubble_chart",
-                                                              "title": international['title'][current_language],
-                                                              "chart_title": international['bubble_chart_title'][current_language],
-                                                              "parameters_title": international['parameters_title'][current_language],
-                                                              "info_header": international['information_header'][current_language],
+                                                              "title": international['title'][lang],
+                                                              "chart_title": international['bubble_chart_title'][lang],
+                                                              "parameters_title": international['parameters_title'][lang],
+                                                              "info_header": international['information_header'][lang],
                                                               "regions": get_region_list_for_select(),
                                                               "from_year": min_year,
                                                               "to_year": max_year})
 
 
-def bubble_chart_url(request, regions, from_year, to_year):
+def bubble_chart_url(request, lang, regions, from_year, to_year):
     regions = regions.split(",")
-    parameters = ((international['regions_title'][current_language], list_to_str(regions)), (international['from_title'][current_language], from_year), (international['to_title'][current_language], to_year),)
+    parameters = ((international['regions_title'][lang], list_to_str(regions)), 
+                  (international['from_title'][lang], from_year), 
+                  (international['to_title'][lang], to_year),)
     return render_to_response('bubble_chart_by_url.html', {"type": "bubble_chart",
-                                                           "title": international['title'][current_language],
-                                                           "chart_title": international['bubble_chart_title'][current_language],
-                                                           "parameters_title":international['parameters_title'][current_language],
-                                                           "info_header": international['information_header'][current_language],
+                                                           "title": international['title'][lang],
+                                                           "chart_title": international['bubble_chart_title'][lang],
+                                                           "parameters_title":international['parameters_title'][lang],
+                                                           "info_header": international['information_header'][lang],
                                                            "parameters": parameters,
                                                            "url": request.path})
 
 
-def bubble_chart_data(request, regions, from_year, to_year):
+def bubble_chart_data(request, lang, regions, from_year, to_year):
     regions = regions.split(",")
     from_year = int(from_year)
     to_year = int(to_year)
-    xAxis = international['bubble_xAxis'][current_language]
-    yAxis = international['bubble_yAxis'][current_language]
-    chart_title = international['bubble_chart_title_param'][current_language] % (from_year,  to_year,)
+    xAxis = international['bubble_xAxis'][lang]
+    yAxis = international['bubble_yAxis'][lang]
+    chart_title = international['bubble_chart_title_param'][lang] % (from_year,  to_year,)
 
-    data = [[international['regions_title'][current_language], xAxis, yAxis, international['year_title'][current_language], international['population_title']]]
+    data = [[international['regions_title'][lang], xAxis, yAxis, international['year_title'][lang], international['population_title']]]
     for region_name in regions:
         region = get_region_by_name(region_name)
         for year in range(from_year, to_year + 1):
@@ -90,10 +101,10 @@ def trend_chart(request):
     min_year = RegionStat.objects.earliest("year").year
     max_year = RegionStat.objects.latest("year").year
     return render_to_response('trend_chart_with_form.html', {"type": "trend_chart",
-                                                             "title": international['title'][current_language],
-                                                             "chart_title": international['trend_chart_title'][current_language],
-                                                             "parameters_title": international['parameters_title'][current_language],
-                                                             "info_header": international['information_header'][current_language],
+                                                             "title": international['title'][lang],
+                                                             "chart_title": international['trend_chart_title'][lang],
+                                                             "parameters_title": international['parameters_title'][lang],
+                                                             "info_header": international['information_header'][lang],
                                                              "regions": get_region_list_for_select(),
                                                              "from_year": min_year,
                                                              "to_year": max_year,
@@ -118,14 +129,14 @@ def trend_chart_url(request, regions, from_year, to_year, chart_type, trend_type
             or scale_name is None:
         return bad_request(request)
 
-    parameters = ((international['regions_title'][current_language], list_to_str(regions)), (international['from_title'][current_language], from_year), (international['to_title'][current_language], to_year), (international['graph_type_title'][current_language], chart_name),
-                  (international['trend_line_title'][current_language], trend_name), (international['reason_title'][current_language], accident_name), (international['observed_title'][current_language], stat_name),
-                  (international['scale_title'][current_language], scale_name),)
+    parameters = ((international['regions_title'][lang], list_to_str(regions)), (international['from_title'][lang], from_year), (international['to_title'][lang], to_year), (international['graph_type_title'][lang], chart_name),
+                  (international['trend_line_title'][lang], trend_name), (international['reason_title'][lang], accident_name), (international['observed_title'][lang], stat_name),
+                  (international['scale_title'][lang], scale_name),)
     return render_to_response('trend_chart_by_url.html', {"type": "trend_chart",
-                                                          "title": international['title'][current_language],
-                                                          "chart_title": international['trend_chart_title'][current_language],
-                                                          "parameters_title": international['parameters_title'][current_language],
-                                                          "info_header": international['information_header'][current_language],
+                                                          "title": international['title'][lang],
+                                                          "chart_title": international['trend_chart_title'][lang],
+                                                          "parameters_title": international['parameters_title'][lang],
+                                                          "info_header": international['information_header'][lang],
                                                           "parameters": parameters,
                                                           "url": request.path})
 
@@ -145,12 +156,12 @@ def trend_chart_data(request, regions, from_year, to_year, chart_type, trend_typ
             or scale_name is None:
         return None
 
-    xAxis = international['year_title'][current_language]
+    xAxis = international['year_title'][lang]
     yAxis = stat_name
-    chart_title = international['trend_reason_title'][current_language]  % (
+    chart_title = international['trend_reason_title'][lang]  % (
         stat_name, scale_name, accident_name, from_year, to_year,)
     year_value_type_function = lambda x: x if chart_type == "point" or trend_type != 'no' else str(x)
-    data = [[international['year_title'][current_language]] + regions] + [[year_value_type_function(year)] for year in range(from_year, to_year + 1)]
+    data = [[international['year_title'][lang]] + regions] + [[year_value_type_function(year)] for year in range(from_year, to_year + 1)]
 
     stat_data = RegionStat.objects.filter(accident_type=accident_type)
     if scale_type == 'no':
@@ -181,10 +192,10 @@ def pie_chart(request):
     min_year = RegionStat.objects.earliest("year").year
     max_year = RegionStat.objects.latest("year").year
     return render_to_response('pie_chart_with_form.html', {"type": "pie_chart",
-                                                           "title": international['title'][current_language],
-                                                           "chart_title": international['pie_chart_title'][current_language],
-                                                           "parameters_title": international['parameters_title'][current_language],
-                                                           "info_header": international['information_header'][current_language],
+                                                           "title": international['title'][lang],
+                                                           "chart_title": international['pie_chart_title'][lang],
+                                                           "parameters_title": international['parameters_title'][lang],
+                                                           "info_header": international['information_header'][lang],
                                                            "regions": get_region_list_for_select(),
                                                            "stat_types": stat_types,
                                                            "from_year": min_year,
@@ -193,12 +204,12 @@ def pie_chart(request):
 
 def pie_chart_url(request, regions, stat_type, from_year, to_year):
     stat_name = get_stat_name_by_type(stat_type)
-    parameters = [(international['regions_title'][current_language], regions), (international['observed_title'][current_language], stat_name), (international['from_title'][current_language], from_year), (international['to_title'][current_language], to_year)]
+    parameters = [(international['regions_title'][lang], regions), (international['observed_title'][lang], stat_name), (international['from_title'][lang], from_year), (international['to_title'][lang], to_year)]
     return render_to_response('pie_chart_by_url.html', {"type": "pie_chart",
-                                                        "title": international['title'][current_language],
-                                                        "chart_title": international['pie_chart_title'][current_language],
-                                                        "parameters_title": international['parameters_title'][current_language],
-                                                        "info_header": international['information_header'][current_language],
+                                                        "title": international['title'][lang],
+                                                        "chart_title": international['pie_chart_title'][lang],
+                                                        "parameters_title": international['parameters_title'][lang],
+                                                        "info_header": international['information_header'][lang],
                                                         "parameters": parameters,
                                                         "url": request.path})
 
@@ -207,7 +218,7 @@ def pie_chart_data(request, regions, stat_type, from_year, to_year):
     regions = regions.split(",")
     from_year = int(from_year)
     to_year = int(to_year)
-    chart_title = international['pie_chart_title_param'][current_language] % (from_year, to_year,)
+    chart_title = international['pie_chart_title_param'][lang] % (from_year, to_year,)
 
     accident_number = {
         'juridical': 0,
@@ -225,7 +236,7 @@ def pie_chart_data(request, regions, stat_type, from_year, to_year):
                 if current.accident_type in accident_number.keys():
                     accident_number[str(current.accident_type)] += current.get_stat_number(stat_type)
 
-    data = [[international['reason_title'][current_language], international['injured_title'][current_language]]] + [[get_accident_name_by_type(current),
+    data = [[international['reason_title'][lang], international['injured_title'][lang]]] + [[get_accident_name_by_type(current),
                                                          accident_number[current]] for current in
                                                         accident_number.keys()]
     return HttpResponse(json.dumps({"chart_title": chart_title, "chart_data": data}), content_type="application/json")
@@ -235,10 +246,10 @@ def sankey_chart(request):
     min_year = RegionStat.objects.earliest("year").year
     max_year = RegionStat.objects.latest("year").year
     return render_to_response('sankey_chart_with_form.html', {"type": "sankey_chart",
-                                                              "title": international['title'][current_language],
-                                                              "chart_title": international['sankey_chart_title'][current_language],
-                                                              "parameters_title": international['parameters_title'][current_language],
-                                                              "info_header": international['information_header'][current_language],
+                                                              "title": international['title'][lang],
+                                                              "chart_title": international['sankey_chart_title'][lang],
+                                                              "parameters_title": international['parameters_title'][lang],
+                                                              "info_header": international['information_header'][lang],
                                                               "regions": get_region_list_for_select(),
                                                               "stat_types": stat_types,
                                                               "from_year": min_year,
@@ -247,12 +258,12 @@ def sankey_chart(request):
 
 def sankey_chart_url(request, regions, stat_type, from_year, to_year):
     stat_name = get_stat_name_by_type(stat_type)
-    parameters = [(international['regions_title'][current_language], regions), (international['observed_title'][current_language], stat_name), (international['from_title'][current_language], from_year), (international['to_title'][current_language], to_year)]
+    parameters = [(international['regions_title'][lang], regions), (international['observed_title'][lang], stat_name), (international['from_title'][lang], from_year), (international['to_title'][lang], to_year)]
     return render_to_response('sankey_chart_by_url.html', {"type": "sankey_chart",
-                                                           "title": international['title'][current_language],
-                                                           "chart_title": international['sankey_chart_title'][current_language],
-                                                           "parameters_title": international['parameters_title'][current_language],
-                                                           "info_header": international['information_header'][current_language],
+                                                           "title": international['title'][lang],
+                                                           "chart_title": international['sankey_chart_title'][lang],
+                                                           "parameters_title": international['parameters_title'][lang],
+                                                           "info_header": international['information_header'][lang],
                                                            "parameters": parameters,
                                                            "url": request.path})
 
@@ -261,7 +272,7 @@ def sankey_chart_data(request, regions, stat_type, from_year, to_year):
     regions = regions.split(",")
     from_year = int(from_year)
     to_year = int(to_year)
-    chart_title = international['sankey_title_param'][current_language] % (
+    chart_title = international['sankey_title_param'][lang] % (
         from_year, to_year,)
     stat_name = get_stat_name_by_type(stat_type)
     accident_number = {
@@ -287,7 +298,7 @@ def sankey_chart_data(request, regions, stat_type, from_year, to_year):
     broken_name = get_accident_name_by_type('broken')
     roads_name = get_accident_name_by_type('roads')
     pedestrian_name = get_accident_name_by_type('pedestrian')
-    driver_and_pedestrian_name = international['driver_pedestrian_title'][current_language]
+    driver_and_pedestrian_name = international['driver_pedestrian_title'][lang]
     data = [['От', 'К', stat_name],
             [all_name, broken_name, accident_number['broken']],
             [all_name, roads_name, accident_number['roads']],
@@ -312,10 +323,10 @@ def finland_comp(request):
     max_year = 2012
 
     return render_to_response('finland_comp_with_form.html', {"type": "finland_comp",
-                                                              "title": international['title'][current_language],
-                                                              "chart_title": international['diff_fin_rus_title'][current_language],
-                                                              "parameters_title": international['parameters_title'][current_language],
-                                                              "info_header": international['information_header'][current_language],
+                                                              "title": international['title'][lang],
+                                                              "chart_title": international['diff_fin_rus_title'][lang],
+                                                              "parameters_title": international['parameters_title'][lang],
+                                                              "info_header": international['information_header'][lang],
                                                               "regions": get_region_list_for_select(True),
                                                               "from_year": min_year,
                                                               "to_year": max_year,
@@ -339,14 +350,14 @@ def finland_comp_url(request, regions, from_year, to_year, chart_type, trend_typ
             or scale_name is None:
         return bad_request(request)
 
-    parameters = ((international['regions_title'][current_language], list_to_str(regions)), (international['from_title'][current_language], from_year), (international['to_title'][current_language], to_year), (international['graph_type_title'][current_language], chart_name),
-                  (international['trend_line_title'][current_language], trend_name), (international['reason_title'][current_language], accident_name), (international['observed_title'][current_language], stat_name),
-                  (international['scale_title'][current_language], scale_name),)
+    parameters = ((international['regions_title'][lang], list_to_str(regions)), (international['from_title'][lang], from_year), (international['to_title'][lang], to_year), (international['graph_type_title'][lang], chart_name),
+                  (international['trend_line_title'][lang], trend_name), (international['reason_title'][lang], accident_name), (international['observed_title'][lang], stat_name),
+                  (international['scale_title'][lang], scale_name),)
     return render_to_response('finland_comp_by_url.html', {"type": "finland_comp",
-                                                          "title": international['title'][current_language],
-                                                          "chart_title": international['diff_fin_rus_title'][current_language],
-                                                          "parameters_title": international['parameters_title'][current_language],
-                                                          "info_header": international['information_header'][current_language],
+                                                          "title": international['title'][lang],
+                                                          "chart_title": international['diff_fin_rus_title'][lang],
+                                                          "parameters_title": international['parameters_title'][lang],
+                                                          "info_header": international['information_header'][lang],
                                                           "parameters": parameters,
                                                           "url": request.path})
 
@@ -365,11 +376,11 @@ def finland_comp_data(request, regions, from_year, to_year, chart_type, trend_ty
             or scale_name is None:
         return None
 
-    xAxis = international['year_title'][current_language]
+    xAxis = international['year_title'][lang]
     yAxis = stat_name
-    chart_title = international['diff_fin_param_title'][current_language] % (stat_name, scale_name, from_year, to_year,)
+    chart_title = international['diff_fin_param_title'][lang] % (stat_name, scale_name, from_year, to_year,)
     year_value_type_function = lambda x: x if chart_type == "point" or trend_type != 'no' else str(x)
-    data = [[international['year_title'][current_language]] + regions] + [[year_value_type_function(year)] for year in range(from_year, to_year + 1)]
+    data = [[international['year_title'][lang]] + regions] + [[year_value_type_function(year)] for year in range(from_year, to_year + 1)]
 
     stat_data = RegionStat.objects.filter(accident_type='all')
     if scale_type == 'no':
