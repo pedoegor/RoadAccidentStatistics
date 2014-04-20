@@ -1,6 +1,8 @@
 {% extends 'charts/chart_with_form.html' %}
 {% block params %}
+
 <div class="form-horizontal">
+{% if lang == 'ru' %}
     <fieldset>
         {% include 'region_and_period.html' %}
         <div class="form-group">
@@ -17,11 +19,36 @@
             <label class="col-md-4 control-label" for="showButton"></label>
             <div class="col-md-4">
                 <button id="showButton" class="btn btn-primary ladda-button" data-style="zoom-out" onclick="callShow()">
+                    <span class="ladda-label">Показать</span>
+                </button>
+            </div>
+        </div>
+    </fieldset>
+{% endif %}
+{% if lang == 'en' %}
+    <fieldset>
+        {% include 'region_and_period.html' %}
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="statType">Observed value</label>
+            <div class="col-md-4">
+                <select id="statType" class="form-control">
+                    {% for stat_type in stat_types %}
+                        <option value="{{ stat_type.0 }}">{{ stat_type.2 }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="showButton"></label>
+            <div class="col-md-4">
+                <button id="showButton" class="btn btn-primary ladda-button" data-style="zoom-out" onclick="callShow()">
                     <span class="ladda-label">Show</span>
                 </button>
             </div>
         </div>
     </fieldset>
+{% endif %}
+
 </div>
 {% endblock %}
 

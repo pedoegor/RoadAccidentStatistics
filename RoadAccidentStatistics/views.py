@@ -197,12 +197,13 @@ def trend_chart_data(request, lang, regions, from_year, to_year, chart_type, tre
                                     "trend_type": trend_type}), content_type="application/json")
 
 
-def pie_chart(request):
+def pie_chart(request, lang):
     min_year = RegionStat.objects.earliest("year").year
     max_year = RegionStat.objects.latest("year").year
     return render_to_response('pie_chart_with_form.html', {"type": "pie_chart",
                                                            "title": international['title'][lang],
                                                            "chart_title": international['pie_chart_title'][lang],
+                                                           'lang': lang,
                                                            "parameters_title": international['parameters_title'][lang],
                                                            "info_header": international['information_header'][lang],
                                                            "regions": get_region_list_for_select(),
@@ -211,24 +212,28 @@ def pie_chart(request):
                                                            "to_year": max_year})
 
 
-def pie_chart_url(request, regions, stat_type, from_year, to_year):
-    stat_name = get_stat_name_by_type(stat_type)
-    parameters = [(international['regions_title'][lang], regions), (international['observed_title'][lang], stat_name), (international['from_title'][lang], from_year), (international['to_title'][lang], to_year)]
+def pie_chart_url(request, lang, regions, stat_type, from_year, to_year):
+    stat_name = get_stat_name_by_type(stat_type, lang)
+    parameters = [(international['regions_title'][lang], regions),
+                  (international['observed_title'][lang], stat_name),
+                  (international['from_title'][lang], from_year),
+                  (international['to_title'][lang], to_year)]
     return render_to_response('pie_chart_by_url.html', {"type": "pie_chart",
                                                         "title": international['title'][lang],
                                                         "chart_title": international['pie_chart_title'][lang],
+                                                        'lang': lang,
                                                         "parameters_title": international['parameters_title'][lang],
                                                         "info_header": international['information_header'][lang],
                                                         "parameters": parameters,
                                                         "url": request.path})
 
 
-def pie_chart_data(request, regions, stat_type, from_year, to_year):
+def pie_chart_data(request, lang, regions, stat_type, from_year, to_year):
     regions = regions.split(",")
     from_year = int(from_year)
     to_year = int(to_year)
     chart_title = international['pie_chart_title_param'][lang] % (from_year, to_year,)
-
+    stat_name = get_stat_name_by_type(stat_type, lang)
     accident_number = {
         'juridical': 0,
         'physical': 0,
@@ -245,7 +250,7 @@ def pie_chart_data(request, regions, stat_type, from_year, to_year):
                 if current.accident_type in accident_number.keys():
                     accident_number[str(current.accident_type)] += current.get_stat_number(stat_type)
 
-    data = [[international['reason_title'][lang], international['injured_title'][lang]]] + [[get_accident_name_by_type(current),
+    data = [[international['reason_title'][lang], stat_name]] + [[get_accident_name_by_type(current, lang),
                                                          accident_number[current]] for current in
                                                         accident_number.keys()]
     return HttpResponse(json.dumps({"chart_title": chart_title, "chart_data": data}), content_type="application/json")
