@@ -34,6 +34,8 @@ international = {
     'bubble_chart_header': {'ru' : u'Количество ДТП, число пострадавших и численность населения регионов с %s по %s года',
                                  'en' : u'The number of road accidents, number of injured and the population of regions from %s to %s years'},
 
+    'reason_title': {'ru' : u'Причина ДТП', 'en': u'The reason for road accident'},
+    'observed_title': {'ru' :u'Наблюдаемая величина', 'en': u'Observed value'},
     'graph_type_title': {'ru' : u'Тип графика', 'en': u'Graph type'},
     'trend_line_title': {'ru' : u'Линия тренда', 'en': u'Trend line'},
     'injured_title': {'ru' : u'Число пострадавших', 'en': u'The number of injured'},
@@ -46,10 +48,6 @@ international = {
     'pie_chart_title': {'ru' : u'Круговая диаграмма причин ДТП', 'en' : u'Pie chart reasons of road accidents'},
     'sankey_chart_title': {'ru' : u'Потоковая диаграмма причин ДТП', 'en' : u'Sankey chart of reasons of road accidents'},
 
-
-
-    'reason_title': {'ru' : u'Причина ДТП', 'en': u'The reason for road accident'},
-    'observed_title': {'ru' :u'Наблюдаемая величина', 'en': u'Observed value'},
 
     'pie_chart_title_param' :  {'ru' : u'Процентное соотношение числа пострадавших по причинам ДТП с %s по %s года', 'en': u'Percentage ratio of the number of injured for reasons of road accidents from %s to %s years'},
 

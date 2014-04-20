@@ -1,57 +1,7 @@
 {% extends 'charts/chart_with_form.html' %}
 {% block params %}
 <div class="form-horizontal">
-    <fieldset>
-        {% include 'region_and_period.html' %}
-        <div class="form-group">
-            <label class="col-md-4 control-label" for="chartType">Graph type</label>
-            <div class="col-md-4">
-                <select id="chartType" class="form-control">
-                    {% for chart_type in chart_types %}
-                        <option value="{{ chart_type.0 }}">{{ chart_type.1 }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-md-4 control-label" for="trendType">Trend line</label>
-            <div class="col-md-4">
-                <select id="trendType" class="form-control">
-                    {% for trend_type in trend_types %}
-                        <option value="{{ trend_type.0 }}">{{ trend_type.1 }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-md-4 control-label" for="statType">Observed value</label>
-            <div class="col-md-4">
-                <select id="statType" class="form-control">
-                    {% for stat_type in stat_types %}
-                        <option value="{{ stat_type.0 }}">{{ stat_type.1 }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-md-4 control-label" for="scaleType">Scale</label>
-            <div class="col-md-4">
-                <select id="scaleType" class="form-control">
-                    {% for scale_type in scale_types %}
-                        <option value="{{ scale_type.0 }}">{{ scale_type.1 }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-md-4 control-label" for="showButton"></label>
-            <div class="col-md-4">
-                <button id="showButton" class="btn btn-primary ladda-button" data-style="zoom-out" onclick="callShow()">
-                    <span class="ladda-label">Show</span>
-                </button>
-            </div>
-        </div>
-    </fieldset>
+
 </div>
 {% endblock %}
 

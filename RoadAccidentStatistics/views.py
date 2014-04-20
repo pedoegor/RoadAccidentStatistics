@@ -334,6 +334,7 @@ def finland_comp(request, lang):
     return render_to_response('finland_comp_with_form.html', {"type": "finland_comp",
                                                               "title": international['title'][lang],
                                                               "chart_title": international['diff_fin_rus_title'][lang],
+                                                              'lang': lang,
                                                               "parameters_title": international['parameters_title'][lang],
                                                               "info_header": international['information_header'][lang],
                                                               "regions": get_region_list_for_select(True),
@@ -345,7 +346,7 @@ def finland_comp(request, lang):
                                                               "scale_types": get_finland_types(scale_types)})
 
 
-def finland_comp_url(request, regions, lang, from_year, to_year, chart_type, trend_type, stat_type, scale_type):
+def finland_comp_url(request, lang, regions, from_year, to_year, chart_type, trend_type, stat_type, scale_type):
     regions = regions.split(",")
     from_year = int(from_year)
     to_year = int(to_year)
@@ -359,12 +360,18 @@ def finland_comp_url(request, regions, lang, from_year, to_year, chart_type, tre
             or scale_name is None:
         return bad_request(request)
 
-    parameters = ((international['regions_title'][lang], list_to_str(regions)), (international['from_title'][lang], from_year), (international['to_title'][lang], to_year), (international['graph_type_title'][lang], chart_name),
-                  (international['trend_line_title'][lang], trend_name), (international['reason_title'][lang], accident_name), (international['observed_title'][lang], stat_name),
+    parameters = ((international['regions_title'][lang], list_to_str(regions)),
+                  (international['from_title'][lang], from_year),
+                  (international['to_title'][lang], to_year),
+                  (international['graph_type_title'][lang], chart_name),
+                  (international['trend_line_title'][lang], trend_name),
+                  (international['reason_title'][lang], accident_name),
+                  (international['observed_title'][lang], stat_name),
                   (international['scale_title'][lang], scale_name),)
     return render_to_response('finland_comp_by_url.html', {"type": "finland_comp",
                                                           "title": international['title'][lang],
                                                           "chart_title": international['diff_fin_rus_title'][lang],
+                                                          'lang': lang,
                                                           "parameters_title": international['parameters_title'][lang],
                                                           "info_header": international['information_header'][lang],
                                                           "parameters": parameters,

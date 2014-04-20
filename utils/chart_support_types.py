@@ -62,8 +62,8 @@ scale_types = (
 )
 
 chart_types = (
-    ('column', u'Вертикальная гистограмма', u'Bar chart',),
-    ('bar', u'Горизонтальная гистограмма', u'Column chart',),
+    ('column', u'Вертикальная гистограмма', u'Column chart',),
+    ('bar', u'Горизонтальная гистограмма', u'Bar chart',),
     ('area', u'Диаграмма с областями', u'Area chart',),
     ('line', u'Линейный график', u'Line chart',),
     ('point', u'Точечный график', u'Scatter chart',),
