@@ -44,7 +44,7 @@ accident_types = (
     ('pedestrian', u'Нарушение ПДД пешеходами', u'Violation of traffic rules by pedestrians',),
     ('broken', u'ДТП из-за эксплуатации технически неисправных ТС', u'Accidents due to exploitation of technically faulty vehicles',),
     ('roads', u'ДТП из-за неудовлетворительного состояния улиц и дорог', u'Accidents due to the poor state of roads and streets',),
-    ('hidden', u'ДТП с участием неустановленных транспортных средств', u'Accidents involving unidentified vehicles',),
+    ('hidden', u'ДТП с участием неустановленных транспортных средств', u'Road accidents involving unidentified vehicles',),
     ('all', u'Общее количество ДТП', u'Total number of road accidents',),
 )
 

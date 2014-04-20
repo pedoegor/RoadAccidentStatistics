@@ -256,12 +256,13 @@ def pie_chart_data(request, lang, regions, stat_type, from_year, to_year):
     return HttpResponse(json.dumps({"chart_title": chart_title, "chart_data": data}), content_type="application/json")
 
 
-def sankey_chart(request):
+def sankey_chart(request, lang):
     min_year = RegionStat.objects.earliest("year").year
     max_year = RegionStat.objects.latest("year").year
     return render_to_response('sankey_chart_with_form.html', {"type": "sankey_chart",
                                                               "title": international['title'][lang],
                                                               "chart_title": international['sankey_chart_title'][lang],
+                                                              'lang': lang,
                                                               "parameters_title": international['parameters_title'][lang],
                                                               "info_header": international['information_header'][lang],
                                                               "regions": get_region_list_for_select(),
@@ -270,12 +271,16 @@ def sankey_chart(request):
                                                               "to_year": max_year})
 
 
-def sankey_chart_url(request, regions, stat_type, from_year, to_year):
-    stat_name = get_stat_name_by_type(stat_type)
-    parameters = [(international['regions_title'][lang], regions), (international['observed_title'][lang], stat_name), (international['from_title'][lang], from_year), (international['to_title'][lang], to_year)]
+def sankey_chart_url(request, lang, regions, stat_type, from_year, to_year):
+    stat_name = get_stat_name_by_type(stat_type, lang)
+    parameters = [(international['regions_title'][lang], regions),
+                  (international['observed_title'][lang], stat_name),
+                  (international['from_title'][lang], from_year),
+                  (international['to_title'][lang], to_year)]
     return render_to_response('sankey_chart_by_url.html', {"type": "sankey_chart",
                                                            "title": international['title'][lang],
                                                            "chart_title": international['sankey_chart_title'][lang],
+                                                           'lang': lang,
                                                            "parameters_title": international['parameters_title'][lang],
                                                            "info_header": international['information_header'][lang],
                                                            "parameters": parameters,
@@ -286,9 +291,8 @@ def sankey_chart_data(request, lang, regions, stat_type, from_year, to_year):
     regions = regions.split(",")
     from_year = int(from_year)
     to_year = int(to_year)
-    chart_title = international['sankey_title_param'][lang] % (
-        from_year, to_year,)
-    stat_name = get_stat_name_by_type(stat_type)
+    chart_title = international['sankey_title_param'][lang] % (from_year, to_year,)
+    stat_name = get_stat_name_by_type(stat_type, lang)
     accident_number = {
         'driver': 0,
         'drunk': 0,
@@ -307,13 +311,13 @@ def sankey_chart_data(request, lang, regions, stat_type, from_year, to_year):
             stat_objects = RegionStat.objects.filter(region=region, year=year)
             for current in stat_objects:
                 accident_number[str(current.accident_type)] += current.get_stat_number(stat_type)
-    all_name = get_accident_name_by_type('all')
-    driver_name = get_accident_name_by_type('driver')
-    broken_name = get_accident_name_by_type('broken')
-    roads_name = get_accident_name_by_type('roads')
-    pedestrian_name = get_accident_name_by_type('pedestrian')
+    all_name = get_accident_name_by_type('all', lang)
+    driver_name = get_accident_name_by_type('driver', lang)
+    broken_name = get_accident_name_by_type('broken', lang)
+    roads_name = get_accident_name_by_type('roads', lang)
+    pedestrian_name = get_accident_name_by_type('pedestrian', lang)
     driver_and_pedestrian_name = international['driver_pedestrian_title'][lang]
-    data = [['От', 'К', stat_name],
+    data = [[international['sankey_chart_from'][lang], international['sankey_chart_to'][lang], stat_name],
             [all_name, broken_name, accident_number['broken']],
             [all_name, roads_name, accident_number['roads']],
             [all_name, driver_and_pedestrian_name, accident_number['driver'] + accident_number['pedestrian']],
@@ -324,9 +328,9 @@ def sankey_chart_data(request, lang, regions, stat_type, from_year, to_year):
             [driver_and_pedestrian_name, driver_name, accident_number['driver']],
             [driver_and_pedestrian_name, pedestrian_name, accident_number['pedestrian']],
             [pedestrian_name, '     ', -1],
-            [driver_name, get_accident_name_by_type('physical'), accident_number['physical']],
-            [driver_name, get_accident_name_by_type('juridical'), accident_number['juridical']],
-            [driver_name, get_accident_name_by_type('hidden'), accident_number['hidden']]]
+            [driver_name, get_accident_name_by_type('physical', lang), accident_number['physical']],
+            [driver_name, get_accident_name_by_type('juridical', lang), accident_number['juridical']],
+            [driver_name, get_accident_name_by_type('hidden', lang), accident_number['hidden']]]
     print str(data)
 
     return HttpResponse(json.dumps({"chart_title": chart_title, "chart_data": data}), content_type="application/json")
