@@ -14,11 +14,13 @@
     <script src="{% static 'RoadAccidentStatistics/js/ladda.min.js' %}" type="text/javascript"></script>
     <script type="text/javascript">
         function fillYears(selectorName, fromYear, toYear) {
+            var old_year = $('#' + selectorName).val();
             var html = '';
             for(var i = fromYear; i <= toYear; i++){
                 html += '<option value="' + i + '">' + i + '</option>';
             }
             $('#' + selectorName).html(html);
+            if(fromYear <= old_year && old_year <= toYear) $('#' + selectorName).val(old_year);
         }
         $(document).ready(function(){
             fillYears('fromYear', {{ from_year }}, {{ to_year }});
