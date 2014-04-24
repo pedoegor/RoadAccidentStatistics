@@ -51,7 +51,7 @@ accident_types = (
 stat_types = (
     ('hurt', u'Число пострадавших', u'The number of victims', True),
     ('dead', u'Число погибших', u'The death toll', True),
-    ('injured', u'Число раненых', u'The number of wounded', True),
+    ('injured', u'Число раненых', u'The number of injured', True),
     ('accident', u'Число ДТП', u'The number of road accidents', False),
 )
 
