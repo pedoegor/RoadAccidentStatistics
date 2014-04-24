@@ -228,8 +228,8 @@ def pie_chart_data(request, lang, regions, stat_type, from_year, to_year):
     regions = regions.split(",")
     from_year = int(from_year)
     to_year = int(to_year)
-    chart_title = international['pie_chart_title_param'][lang] % (from_year, to_year,)
     stat_name = get_stat_name_by_type(stat_type, lang)
+    chart_title = international['pie_chart_title_param'][lang] % (stat_name, from_year, to_year,)
     accident_number = {
         'juridical': 0,
         'physical': 0,

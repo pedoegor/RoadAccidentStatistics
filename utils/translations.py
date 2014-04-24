@@ -59,8 +59,8 @@ international = {
 
     'pie_chart_title': {'ru' : u'Круговая диаграмма причин ДТП',
                         'en' : u'Pie chart reasons of road accidents'},
-    'pie_chart_title_param' :  {'ru' : u'Процентное соотношение числа пострадавших по причинам ДТП с %s по %s года',
-                                'en': u'Percentage ratio of the number of injured for reasons of road accidents from %s to %s years'},
+    'pie_chart_title_param' :  {'ru' : u'%s по причинам ДТП с %s по %s года',
+                                'en': u'%s for road accident reasons from %s to %s years'},
 
     'sankey_chart_title': {'ru' : u'Потоковая диаграмма причин ДТП',
                            'en' : u'Sankey chart of reasons of road accidents'},

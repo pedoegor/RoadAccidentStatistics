@@ -81,7 +81,8 @@ chartObjectMap["pie"] = function(chartDiv, title) {
         object: new google.visualization.PieChart(document.getElementById(chartDiv)),
         options: {
             title: title,
-            is3D: true
+            is3D: true,
+            sliceVisibilityThreshold: 0
         }
     };
 };
