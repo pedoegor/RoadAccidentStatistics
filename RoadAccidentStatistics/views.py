@@ -30,10 +30,6 @@ def get_region_list_for_select(finland_comp=False):
     return regions
 
 
-def dashboard_default(request):
-    return dashboard(request, 'ru')
-
-
 def dashboard(request, lang):
     print lang
     if lang not in ['ru', 'en']:

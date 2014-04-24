@@ -11,7 +11,6 @@
     var chart, info;
     $(document).ready(function(){
         $('.chosen-select').chosen().change(function() {
-            // remove '&nbsp;'
             $('.search-choice span').each(function() {
                 $(this).text($(this).text().trim());
             });
@@ -22,6 +21,7 @@
         $('.search-choice span').each(function() {
                 a[a.length] = $(this).text();
         });
+        if(a.length == 0) alert($('#region_selector').attr('data-placeholder'));
         return a;
     }
     function getFullURL(url) {
@@ -37,7 +37,7 @@
         })
         .success(success)
         .fail(function() {
-                alert("Connection with server is lost");
+                //alert("Connection with server is lost");
         })
         .always(function() {
                 stopLoadAnimation();

@@ -4,7 +4,7 @@
     <data-source source="LOCAL" name="Django default" uuid="47653a39-eefb-4d05-a867-3e1f9052add2">
       <driver-ref>sqlite.xerial</driver-ref>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/db.sqlite3</jdbc-url>
+      <jdbc-url>jdbc:sqlite:C:\Users\saveln\PycharmProjects\RoadAccidentStatistics\db.sqlite3</jdbc-url>
       <libraries>
         <library>
           <url>file://$USER_HOME$/.PyCharm30/config/jdbc-drivers/xerial-sqlite-license.txt</url>

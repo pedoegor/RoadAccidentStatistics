@@ -8,7 +8,6 @@ admin.autodiscover()
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^dashboard/(\w{2})', dashboard),
-    url(r'^dashboard/', dashboard_default),
     url(r'^bubble_chart/(\w{2})/regions/([\w ,-\\.]+)/from_year/(\d{4})/to_year/(\d{4})/data', bubble_chart_data),
     url(r'^bubble_chart/(\w{2})/regions/([\w ,-\\.]+)/from_year/(\d{4})/to_year/(\d{4})', bubble_chart_url),
     url(r'^bubble_chart/(\w{2})/', bubble_chart),
