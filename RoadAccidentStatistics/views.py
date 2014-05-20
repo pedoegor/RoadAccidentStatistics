@@ -34,7 +34,7 @@ def dashboard(request, lang):
     print lang
     if lang not in ['ru', 'en']:
         return bad_request(request)
-    return render_to_response('dashboard.html', {'type': 'dashboard',
+    return render_to_response('dashboard.html', {'type': '',
                                                  'title': international['title'][lang],
                                                  'lang': lang})
 
@@ -327,7 +327,6 @@ def sankey_chart_data(request, lang, regions, stat_type, from_year, to_year):
             [driver_name, get_accident_name_by_type('physical', lang), accident_number['physical']],
             [driver_name, get_accident_name_by_type('juridical', lang), accident_number['juridical']],
             [driver_name, get_accident_name_by_type('hidden', lang), accident_number['hidden']]]
-    print str(data)
 
     return HttpResponse(json.dumps({"chart_title": chart_title, "chart_data": data}), content_type="application/json")
 
