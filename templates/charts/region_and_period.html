@@ -1,4 +1,4 @@
-{% if lang == 'ru' %}
+
     <div class="form-group">
         <label class="col-md-4 control-label" for="region_selector">Регионы</label>
 
@@ -35,42 +35,3 @@
             </fieldset>
         </div>
     </div>
-{% endif %}
-{% if lang == 'en' %}
-    <div class="form-group">
-        <label class="col-md-4 control-label" for="region_selector">Regions</label>
-
-        <div class="col-md-4">
-            <select id='region_selector' data-placeholder="Choose region(s)" class="chosen-select form-control"
-                    multiple tabindex="6">
-                {% for region in regions %}
-                    <option>{{ region.offset|safe }} {{ region.name }}</option>
-                {% endfor %}
-            </select>
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="col-md-4 control-label" for="period">Period</label>
-
-        <div id='period' class="form-horizontal">
-            <fieldset>
-                <div class="form-group">
-                    <label class="col-md-2 control-label" for="fromYear">From</label>
-
-                    <div class="col-md-4">
-                        <select id="fromYear" class="form-control"
-                                onchange="fillYears('toYear', this.value, {{ to_year }})"></select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-md-2 control-label" for="toYear">To</label>
-
-                    <div class="col-md-4">
-                        <select id="toYear" class="form-control"
-                                onchange="fillYears('fromYear', {{ from_year }}, this.value)"></select>
-                    </div>
-                </div>
-            </fieldset>
-        </div>
-    </div>
-{% endif %}

@@ -2,9 +2,6 @@
 __author__ = 'viosng'
 
 
-#(type, russian_name, finland_comparison),
-
-
 #contains sorted list of tables that contains tables with reason
 reason_table_numbers = [0, 2, 3, 4, 5, 6, 8, 9, 10]
 
@@ -303,10 +300,10 @@ parents = {
 }
 
 
-def get_name(searched_type, types, lang, only_finland_comp=False):
+def get_name(searched_type, types, lang, flag=False):
     for cur in types:
         if cur[0] == searched_type:
-            if only_finland_comp and not cur[3]:
+            if flag and not cur[3]:
                 return None
             if lang == 'ru':
                 return cur[1]
@@ -314,29 +311,22 @@ def get_name(searched_type, types, lang, only_finland_comp=False):
     return None
 
 
-def get_accident_name_by_type(searched_accident_type, lang, only_finland_comp=False):
-    return get_name(searched_accident_type, accident_types, lang, only_finland_comp)
+def get_accident_name_by_type(searched_accident_type, lang, flag=False):
+    return get_name(searched_accident_type, accident_types, lang, flag)
 
 
-def get_chart_name_by_type(searched_chart_type, lang, only_finland_comp=False):
-    return get_name(searched_chart_type, chart_types, lang, only_finland_comp)
+def get_chart_name_by_type(searched_chart_type, lang, flag=False):
+    return get_name(searched_chart_type, chart_types, lang, flag)
 
 
-def get_stat_name_by_type(searched_stat_type, lang, only_finland_comp=False):
-    return get_name(searched_stat_type, stat_types, lang, only_finland_comp)
+def get_stat_name_by_type(searched_stat_type, lang, flag=False):
+    return get_name(searched_stat_type, stat_types, lang, flag)
 
 
 def get_trend_name_by_type(searched_trend_type, lang):
     return get_name(searched_trend_type, trend_types, lang)
 
 
-def get_scale_name_by_type(searched_scale_type, lang, only_finland_comp=False):
-    return get_name(searched_scale_type, scale_types, lang, only_finland_comp)
+def get_scale_name_by_type(searched_scale_type, lang, flag=False):
+    return get_name(searched_scale_type, scale_types, lang, flag)
 
-
-def get_finland_types(types):
-    new_types = []
-    for t in types:
-        if t[3]:
-            new_types.append(t)
-    return new_types

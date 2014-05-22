@@ -29,14 +29,12 @@ ALLOWED_HOSTS = ['localhost','127.0.0.1']
 # Application definition
 
 INSTALLED_APPS = (
-    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'RoadAccidentStatistics',
-    'django.contrib.admin',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -90,9 +88,7 @@ STATICFILES_DIRS = (
 TEMPLATE_DIRS = (
     'templates/',
     'templates/charts',
-    'templates/charts/bubble_chart',
     'templates/charts/trend_chart',
     'templates/charts/pie_chart',
     'templates/charts/sankey_chart',
-    'templates/charts/finland_comp'
 )

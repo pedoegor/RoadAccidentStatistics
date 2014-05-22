@@ -48,12 +48,6 @@ chartObjectMap["bar"] = function(chartDiv, title, hAxisTitle, vAxisTitle, minH, 
         options: getOptions(title, vAxisTitle, hAxisTitle, minH, minV, maxH, maxV, trendType, trendLineNumber)
     };
 };
-chartObjectMap["bubble"] = function(chartDiv, title, hAxisTitle, vAxisTitle, minH, minV, maxH, maxV) {
-    return {
-        object: new google.visualization.BubbleChart(document.getElementById(chartDiv)),
-        options: getOptions(title, hAxisTitle, vAxisTitle, minH, minV, maxH, maxV)
-    };
-};
 chartObjectMap["sankey"] = function(chartDiv) {
     return {
         object: new google.visualization.Sankey(document.getElementById(chartDiv)),

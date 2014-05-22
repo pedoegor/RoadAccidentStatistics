@@ -14,48 +14,18 @@
       </button>
       <a class="navbar-brand" href="/roadstat/{{ lang }}">{{ title }}</a>
     </div>
-
-    {% if lang == 'ru' %}
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
             <li{% if type == "dashboard" %} class="active"{% endif %}><a href="/roadstat/{{ lang }}">Главная</a></li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Анализ<b class="caret"></b></a>
               <ul class="dropdown-menu">
-                <li{% if type == "bubble_chart" %} class="active"{% endif %}><a href="/roadstat/bubble_chart/ru">Пузырьковая диаграмма относительной стиатистики ДТП</a></li>
                 <li{% if type == "trend_chart" %} class="active"{% endif %}><a href="/roadstat/trend_chart/ru">График статистики ДТП с трендом</a></li>
                 <li{% if type == "pie_chart" %} class="active"{% endif %}><a href="/roadstat/pie_chart/ru">Круговая диаграмма причин ДТП</a></li>
                 <li{% if type == "sankey_chart" %} class="active"{% endif %}><a href="/roadstat/sankey_chart/ru">Потоковая диаграмма</a></li>
-                <li{% if type == "finland_comp" %} class="active"{% endif %}><a href="/roadstat/finland_comp/ru">Сравнение статистики ДТП в Российской Федерации и Финляндии</a></li>
               </ul>
             </li>
-            {% comment %}<li><a href="/roadstat/admin">Интерфейс администратора</a></li>{% endcomment %}
           </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li><a class="btn" onclick="changeLang('ru', 'en')">English version</a></li>
-            </ul>
         </div>
-    {% endif %}
-  {% if lang == 'en' %}
-      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-          <ul class="nav navbar-nav">
-        <li{% if type == "dashboard" %} class="active"{% endif %}><a href="/roadstat/{{ lang }}">Home page</a></li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Analysis<b class="caret"></b></a>
-          <ul class="dropdown-menu">
-            <li{% if type == "bubble_chart" %} class="active"{% endif %}><a href="/roadstat/bubble_chart/en">Bubble chart or relative road accident statistics</a></li>
-            <li{% if type == "trend_chart" %} class="active"{% endif %}><a href="/roadstat/trend_chart/en">Graph of road accidents statistics with a trend line</a></li>
-            <li{% if type == "pie_chart" %} class="active"{% endif %}><a href="/roadstat/pie_chart/en">Pie chart of road accident reasons</a></li>
-            <li{% if type == "sankey_chart" %} class="active"{% endif %}><a href="/roadstat/sankey_chart/en">Sankey chart of road accident reasons</a></li>
-            <li{% if type == "finland_comp" %} class="active"{% endif %}><a href="/roadstat/finland_comp/en">Comparison of road accident statistics of the Russian Federation and Finland</a></li>
-          </ul>
-        </li>
-        {% comment %}<li><a href="/roadstat/admin">Admin interface</a></li>{% endcomment %}
-      </ul>
-          <ul class="nav navbar-nav navbar-right">
-              <li><a class="btn" onclick="changeLang('en', 'ru')">Русская версия</a></li>
-          </ul>
-      </div>
-  {% endif %}
   </div>
 </nav>

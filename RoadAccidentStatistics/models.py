@@ -5,7 +5,6 @@ from utils.chart_support_types import *
 
 class Region(models.Model):
     name = models.CharField(max_length=100, unique=True)
-    english_name = models.CharField(max_length=100, blank=True)
     parent = models.ForeignKey("self", null=True, default=None)
 
     def __unicode__(self):
