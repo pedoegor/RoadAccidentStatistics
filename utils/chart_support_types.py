@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-__author__ = 'viosng'
 
 
 #contains sorted list of tables that contains tables with reason
@@ -34,42 +33,42 @@ accident_types_models = (
 )
 
 accident_types = (
-    ('driver', u'Нарушение ПДД водителями ТС', u'Violation of traffic rules by vehicle drivers',),
-    ('drunk', u'Нарушение ПДД водителями ТС в состоянии алкогольного опьянения', u'Violation of traffic rules by vehicle drivers while intoxicated',),
-    ('juridical', u'Нарушение ПДД водителями ТС юридических лиц', u'Violation of traffic rules by entity vehicle drivers',),
-    ('physical', u'Нарушение ПДД водителями ТС физических лиц', u'Violation of traffic rules by individual vehicle drivers',),
-    ('pedestrian', u'Нарушение ПДД пешеходами', u'Violation of traffic rules by pedestrians',),
-    ('broken', u'ДТП из-за эксплуатации технически неисправных ТС', u'Accidents due to exploitation of technically faulty vehicles',),
-    ('roads', u'ДТП из-за неудовлетворительного состояния улиц и дорог', u'Accidents due to the poor state of roads and streets',),
-    ('hidden', u'ДТП с участием неустановленных транспортных средств', u'Road accidents involving unidentified vehicles',),
-    ('all', u'Общее количество ДТП', u'Total number of road accidents',),
+    ('driver', u'Нарушение ПДД водителями ТС',),
+    ('drunk', u'Нарушение ПДД водителями ТС в состоянии алкогольного опьянения',),
+    ('juridical', u'Нарушение ПДД водителями ТС юридических лиц',),
+    ('physical', u'Нарушение ПДД водителями ТС физических лиц',),
+    ('pedestrian', u'Нарушение ПДД пешеходами',),
+    ('broken', u'ДТП из-за эксплуатации технически неисправных ТС',),
+    ('roads', u'ДТП из-за неудовлетворительного состояния улиц и дорог',),
+    ('hidden', u'ДТП с участием неустановленных транспортных средств',),
+    ('all', u'Общее количество ДТП',),
 )
 
 stat_types = (
-    ('hurt', u'Число пострадавших', u'The number of victims', True),
-    ('dead', u'Число погибших', u'The death toll', True),
-    ('injured', u'Число раненых', u'The number of injured', True),
-    ('accident', u'Число ДТП', u'The number of road accidents', False),
+    ('hurt', u'Число пострадавших',),
+    ('dead', u'Число погибших',),
+    ('injured', u'Число раненых',),
+    ('accident', u'Число ДТП',),
 )
 
 scale_types = (
-    ('no', u'без масштаба', u'No', True),
-    ('population', u'на 100 тыс. жителей', u'per 100,000 inhabitants', True),
-    ('transport', u'на 10 тыс. транспортных средств', u'per 10,000 units of vehicles', False),
+    ('no', u'без масштаба',),
+    ('population', u'на 100 тыс. жителей',),
+    ('transport', u'на 10 тыс. транспортных средств',),
 )
 
 chart_types = (
-    ('column', u'Вертикальная гистограмма', u'Column chart',),
-    ('bar', u'Горизонтальная гистограмма', u'Bar chart',),
-    ('area', u'Диаграмма с областями', u'Area chart',),
-    ('line', u'Линейный график', u'Line chart',),
-    ('point', u'Точечный график', u'Scatter chart',),
+    ('column', u'Вертикальная гистограмма',),
+    ('bar', u'Горизонтальная гистограмма',),
+    ('area', u'Диаграмма с областями',),
+    ('line', u'Линейный график',),
+    ('point', u'Точечный график',),
 )
 
 trend_types = (
-    ('no', u'Нет', u'No',),
-    ('linear', u'Линейная', u'Linear',),
-    ('exponential', u'Экспоненциальная', u'Exponential',),
+    ('no', u'Нет',),
+    ('linear', u'Линейная',),
+    ('exponential', u'Экспоненциальная',),
 )
 
 #sorted regions list in base loading order
@@ -300,33 +299,31 @@ parents = {
 }
 
 
-def get_name(searched_type, types, lang, flag=False):
+def get_name(searched_type, types, flag=False):
     for cur in types:
         if cur[0] == searched_type:
             if flag and not cur[3]:
                 return None
-            if lang == 'ru':
-                return cur[1]
-            return cur[2]
+            return cur[1]
     return None
 
 
-def get_accident_name_by_type(searched_accident_type, lang, flag=False):
-    return get_name(searched_accident_type, accident_types, lang, flag)
+def get_accident_name_by_type(searched_accident_type, flag=False):
+    return get_name(searched_accident_type, accident_types, flag)
 
 
-def get_chart_name_by_type(searched_chart_type, lang, flag=False):
-    return get_name(searched_chart_type, chart_types, lang, flag)
+def get_chart_name_by_type(searched_chart_type, flag=False):
+    return get_name(searched_chart_type, chart_types, flag)
 
 
-def get_stat_name_by_type(searched_stat_type, lang, flag=False):
-    return get_name(searched_stat_type, stat_types, lang, flag)
+def get_stat_name_by_type(searched_stat_type, flag=False):
+    return get_name(searched_stat_type, stat_types, flag)
 
 
-def get_trend_name_by_type(searched_trend_type, lang):
-    return get_name(searched_trend_type, trend_types, lang)
+def get_trend_name_by_type(searched_trend_type):
+    return get_name(searched_trend_type, trend_types)
 
 
-def get_scale_name_by_type(searched_scale_type, lang, flag=False):
-    return get_name(searched_scale_type, scale_types, lang, flag)
+def get_scale_name_by_type(searched_scale_type, flag=False):
+    return get_name(searched_scale_type, scale_types, flag)
 

@@ -12,17 +12,17 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="/roadstat/{{ lang }}">{{ title }}</a>
+      <a class="navbar-brand" href="/">{{ title }}</a>
     </div>
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-            <li{% if type == "dashboard" %} class="active"{% endif %}><a href="/roadstat/{{ lang }}">Главная</a></li>
+            <li{% if type == "dashboard" %} class="active"{% endif %}><a href="/">Главная</a></li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Анализ<b class="caret"></b></a>
               <ul class="dropdown-menu">
-                <li{% if type == "trend_chart" %} class="active"{% endif %}><a href="/roadstat/trend_chart/ru">График статистики ДТП с трендом</a></li>
-                <li{% if type == "pie_chart" %} class="active"{% endif %}><a href="/roadstat/pie_chart/ru">Круговая диаграмма причин ДТП</a></li>
-                <li{% if type == "sankey_chart" %} class="active"{% endif %}><a href="/roadstat/sankey_chart/ru">Потоковая диаграмма</a></li>
+                <li{% if type == "trend_chart" %} class="active"{% endif %}><a href="/trend_chart">График статистики ДТП с трендом</a></li>
+                <li{% if type == "pie_chart" %} class="active"{% endif %}><a href="/pie_chart">Круговая диаграмма причин ДТП</a></li>
+                <li{% if type == "sankey_chart" %} class="active"{% endif %}><a href="/sankey_chart">Потоковая диаграмма</a></li>
               </ul>
             </li>
           </ul>
